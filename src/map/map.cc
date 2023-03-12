@@ -5,20 +5,21 @@
 #include "map.h"
 
 namespace map {
-tMap Map::getMap() {
-  return map_;
+
+std::size_t Map::getWidth() {
+  return map_.at(0).size();
 }
 
-int Map::getWidth() {
-  return kMapWidth;
-}
-
-int Map::getHeight() {
-  return kMapHeight;
+std::size_t Map::getHeight() {
+  return map_.size();
 }
 
 bool Map::isWall(int x, int y) {
   return map_.at(y).at(x);
+}
+
+Map::Map(tMap map) {
+  map_ = map;
 }
 
 }

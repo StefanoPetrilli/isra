@@ -46,7 +46,7 @@ camera::Position findHorizontalIntersection(camera::Position camera_position, do
 
   auto gridIntersection = findFirstHorizontalIntersection(camera_position, angle, tg);
 
-  while (isInside(gridIntersection)) {
+  while (isInside(gridIntersection, map)) {
     if (isWall(gridIntersection, map)) {
       return gridIntersection;
     }
@@ -62,7 +62,7 @@ double isUp(double angle) {
   return angle < 180;
 }
 
-camera::Position findFirstVerticalIntersection(camera::Position camera_position, double angle, float tg) {
+camera::Position findFirstVerticalIntersection(camera::Position camera_position, double angle, double tg) {
   camera::Position result{};
 
   result.x = (floor(camera_position.x / map::kBlockSize) * map::kBlockSize) + (isLeft(angle) ? -1 : map::kBlockSize);
@@ -76,7 +76,7 @@ camera::Position findVerticalIntersection(camera::Position camera_position, doub
 
   auto gridIntersection = findFirstVerticalIntersection(camera_position, angle, tg);
 
-  while (isInside(gridIntersection)) {
+  while (isInside(gridIntersection, map)) {
     if (isWall(gridIntersection, map)) {
       return gridIntersection;
     }
@@ -92,9 +92,9 @@ bool isLeft(double angle) {
   return (angle > 90.0f && angle < 270.0f);
 }
 
-bool isInside(camera::Position position) {
+bool isInside(camera::Position position, map::Map map) {
   double x = mapToMap(position.x), y = mapToMap(position.y);
-  return (x >= 0 && y >= 0) && (x < map::Map::getWidth() && y < map::Map::getHeight());
+  return (x >= 0 && y >= 0) && (x < map.getWidth() && y < map.getHeight());
 }
 
 bool isWall(camera::Position position, map::Map map) {

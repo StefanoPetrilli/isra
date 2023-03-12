@@ -5,7 +5,7 @@
 #ifndef ISRA_SRC_MAP_MAP_H_
 #define ISRA_SRC_MAP_MAP_H_
 
-#include <array>
+#include <vector>
 
 namespace map {
 
@@ -13,26 +13,17 @@ const static double kBlockSize = 64;
 const static int kMapWidth = 5;
 const static int kMapHeight = 8;
 
-typedef std::array<std::array<int, kMapWidth>, kMapHeight> tMap;
-
+typedef std::vector<std::vector<int>> tMap;
 
 class Map {
 
-  constexpr const static tMap map_{{
-                                             {{0, 0, 1, 1}},
-                                             {{0, 0, 0, 1}},
-                                             {{0, 0, 0, 0}},
-                                             {{0, 0, 0, 0}},
-                                             {{0, 0, 0, 0}},
-                                             {{0, 0, 0, 0}}
-                                   }};
+  tMap map_{};
 
  public:
-  static tMap getMap();
-  static int getWidth();
-  static int getHeight();
-  static bool isWall(int x, int y);
-
+  Map(tMap map);
+  std::size_t getWidth();
+  std::size_t getHeight();
+  bool isWall(int x, int y);
 };
 }
 #endif //ISRA_SRC_MAP_MAP_H_

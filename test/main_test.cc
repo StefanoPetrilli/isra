@@ -14,7 +14,10 @@ int main(int argc, char **argv) {
 
 TEST(FindHorizontalIntersection, Expect_FirstHoriontalWallIntersection) {
 
-  map::Map map;
+  map::Map map({{1, 1, 1, 1},
+                {0, 0, 0, 0},
+                {0, 0, 0, 0},
+                {0, 0, 0, 0}});
 
   camera::Position expected = {187, 63};
   auto result = draw::findHorizontalIntersection({96, 224}, 60, map);
@@ -25,7 +28,10 @@ TEST(FindHorizontalIntersection, Expect_FirstHoriontalWallIntersection) {
 
 TEST(FindFirstHorizontalIntersection, Expect_FirstHorizontalIntersection) {
 
-  map::Map map;
+  map::Map map({{1, 1, 1, 1},
+                {0, 0, 0, 0},
+                {0, 0, 0, 0},
+                {0, 0, 0, 0}});
 
   camera::Position expected = {115, 191};
   auto result = draw::findFirstHorizontalIntersection({96, 224}, 60, tan(60 * (3.1418 / 180.0)));
@@ -36,7 +42,10 @@ TEST(FindFirstHorizontalIntersection, Expect_FirstHorizontalIntersection) {
 
 TEST(FindVerticalIntersection, Expect_FirstVerticalWallIntersection) {
 
-  map::Map map;
+  map::Map map({{1, 1, 1, 1},
+                {0, 0, 0, 0},
+                {0, 0, 0, 0},
+                {0, 0, 0, 0}});
 
   camera::Position expected = {192, 57.92f};
   auto result = draw::findVerticalIntersection({96, 224}, 60, map);
@@ -47,7 +56,10 @@ TEST(FindVerticalIntersection, Expect_FirstVerticalWallIntersection) {
 
 TEST(FindFirstVerticalIntersection, Expect_FirstVerticalIntersection) {
 
-  map::Map map;
+  map::Map map({{1, 1, 1, 1},
+                {0, 0, 0, 0},
+                {0, 0, 0, 0},
+                {0, 0, 0, 0}});
 
   camera::Position expected = {128, 168.64};
   auto result = draw::findFirstVerticalIntersection({96, 224}, 60, tan(60 * (3.1418 / 180.0)));
