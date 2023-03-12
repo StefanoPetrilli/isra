@@ -41,7 +41,7 @@ camera::Position findFirstHorizontalIntersection(camera::Position camera_positio
   return result;
 }
 
-camera::Position findHorizontalIntersection(camera::Position camera_position, double angle, map::Map map) {
+camera::Position findHorizontalIntersection(camera::Position camera_position, double angle, const map::Map& map) {
   float tg = tan(angle * (3.1418 / 180.0));
 
   auto gridIntersection = findFirstHorizontalIntersection(camera_position, angle, tg);
@@ -71,7 +71,7 @@ camera::Position findFirstVerticalIntersection(camera::Position camera_position,
   return result;
 }
 
-camera::Position findVerticalIntersection(camera::Position camera_position, double angle, map::Map map) {
+camera::Position findVerticalIntersection(camera::Position camera_position, double angle, const map::Map& map) {
   float tg = tan(angle * (3.1418 / 180.0));
 
   auto gridIntersection = findFirstVerticalIntersection(camera_position, angle, tg);

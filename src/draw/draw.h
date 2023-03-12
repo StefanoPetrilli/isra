@@ -17,8 +17,8 @@ const static double kHeightConstant = map::kBlockSize * camera::Camera::GetDista
 void draw(int columns_number, int columns_height, camera::Camera *camera, SDL_Renderer *renderer, map::Map map);
 void clean(SDL_Renderer *renderer);
 bool isWall(camera::Position position, map::Map map);
-camera::Position findHorizontalIntersection(camera::Position camera_position, double angle, map::Map map);
-camera::Position findVerticalIntersection(camera::Position camera_position, double angle, map::Map map);
+camera::Position findHorizontalIntersection(camera::Position camera_position, double angle, const map::Map& map);
+camera::Position findVerticalIntersection(camera::Position camera_position, double angle, const map::Map& map);
 camera::Position findFirstHorizontalIntersection(camera::Position camera_position, double angle, float tg);
 camera::Position findFirstVerticalIntersection(camera::Position camera_position, double angle, double tg);
 int mapToMap(double x);
