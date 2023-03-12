@@ -5,12 +5,13 @@
 #include "camera.h"
 
 namespace camera {
+
 void Camera::moveLeft() {
-  position_.x += MOVE_CONSTANT;
+  position_.x -= MOVE_CONSTANT;
 }
 
 void Camera::moveRight() {
-  position_.x -= MOVE_CONSTANT;
+  position_.x += MOVE_CONSTANT;
 }
 
 void Camera::moveBackward() {
@@ -22,23 +23,24 @@ void Camera::moveForward() {
 }
 
 void Camera::rotateLeft() {
-  view_direction_ -= ROTATE_CONSTANT;
+  view_direction_ += ROTATE_CONSTANT;
+  if (view_direction_ > 360.0f) view_direction_ = 0.0f;
 }
 
 void Camera::rotateRight() {
-  view_direction_ += ROTATE_CONSTANT;
+  view_direction_ -= ROTATE_CONSTANT;
+  if (view_direction_ < 0.0f) view_direction_ = 360.0f;
 }
 
-float Camera::getFacingDirection() const {
+double Camera::getFacingDirection() const {
   return view_direction_;
 }
 Camera::Camera() {
-  view_direction_ = 90;
+  view_direction_ = 90.0f;
   position_ = {
-      .x = 224, .y = 224
+      .x = 115.0f, .y = 224.0f
   };
-  FOV_ = 60.0f;
-  height_ = 60;
+  height_ = 60.0f;
 }
 
 void Camera::move(int key) {
@@ -59,8 +61,12 @@ void Camera::move(int key) {
   }
 }
 
-float Camera::getFOV() const {
-  return FOV_;
+double Camera::getFOV() {
+  return kFOV_;
+}
+
+double Camera::GetDistanceFromProjectionPlane() {
+  return kDistanceFromProjectionPlane_;
 }
 
 Position Camera::getPosition() {

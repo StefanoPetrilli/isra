@@ -11,12 +11,20 @@
 #include <camera.h>
 
 namespace draw {
-void draw(int columns_number, int columns_height, camera::Camera *camera, SDL_Renderer *renderer, map::tMap map);
+
+const static double kHeightConstant = map::kBlockSize * camera::Camera::GetDistanceFromProjectionPlane();
+
+void draw(int columns_number, int columns_height, camera::Camera *camera, SDL_Renderer *renderer, map::Map map);
 void clean(SDL_Renderer *renderer);
-bool isWall(camera::Position position, map::tMap map);
-camera::Position findHorizontalIntersection(camera::Position camera_position, float angle, map::tMap map);
-int mapToMap(float x);
-bool isInside(camera::Position position, map::tMap map);
-float findDistance(camera::Position intersection_position, camera::Position camera_position);
+bool isWall(camera::Position position, map::Map map);
+camera::Position findHorizontalIntersection(camera::Position camera_position, double angle, map::Map map);
+camera::Position findVerticalIntersection(camera::Position camera_position, double angle, map::Map map);
+camera::Position findFirstHorizontalIntersection(camera::Position camera_position, double angle, float tg);
+camera::Position findFirstVerticalIntersection(camera::Position camera_position, double angle, float tg);
+int mapToMap(double x);
+bool isInside(camera::Position position);
+double findDistance(camera::Position intersection_position, camera::Position camera_position);
+bool isLeft(double angle);
+double isUp(double angle);
 }
 #endif //ISRA_SRC_DRAW_H_

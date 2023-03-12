@@ -9,19 +9,29 @@
 
 namespace map {
 
-typedef std::array<std::array<int, 4>, 4> tMap;
+const static double kBlockSize = 64;
+const static int kMapWidth = 5;
+const static int kMapHeight = 8;
+
+typedef std::array<std::array<int, kMapWidth>, kMapHeight> tMap;
+
 
 class Map {
 
   constexpr const static tMap map_{{
-                                             {{1, 1, 1, 1}},
-                                             {{0, 1, 0, 0}},
-                                             {{0, 1, 0, 0}},
+                                             {{0, 0, 1, 1}},
+                                             {{0, 0, 0, 1}},
+                                             {{0, 0, 0, 0}},
+                                             {{0, 0, 0, 0}},
+                                             {{0, 0, 0, 0}},
                                              {{0, 0, 0, 0}}
                                    }};
 
  public:
   static tMap getMap();
+  static int getWidth();
+  static int getHeight();
+  static bool isWall(int x, int y);
 
 };
 }

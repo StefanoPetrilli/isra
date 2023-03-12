@@ -15,24 +15,28 @@
 #define D_KEY_PRESSED 100
 
 namespace camera {
+const static int kWindow_Width = 900;
+const static int kWindow_Height = 600;
 
 struct Position {
-  float x;
-  float y;
+  double x;
+  double y;
 };
 
 class Camera {
   Position position_{};
-  float view_direction_;
-  int height_;
-  float FOV_;
+  double view_direction_;
+  double height_;
+  constexpr static const double kFOV_ = 60.0f;
+  constexpr static const double kDistanceFromProjectionPlane_ = (camera::kWindow_Width / 2.0f) / 1.732050f; //TODO lockup table for tan(kFOV_*3.14159/180);
 
  public:
   Camera();
   void move(int key);
-  float getFacingDirection() const;
-  float getFOV() const;
+  double getFacingDirection() const;
+  static double getFOV();
   Position getPosition();
+  static double GetDistanceFromProjectionPlane();
 
  protected:
   void moveForward();

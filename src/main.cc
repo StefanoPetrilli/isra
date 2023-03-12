@@ -1,23 +1,22 @@
 #include "main.h"
 
-#define WINDOW_WIDTH 900
-#define WINDOW_HEIGHT 600
-
 int main() {
   SDL_Event event;
   SDL_Renderer *renderer;
   SDL_Window *window;
 
+  camera::Camera camera;
+
   SDL_Init(SDL_INIT_VIDEO);
-  SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer);
+  SDL_CreateWindowAndRenderer(camera::kWindow_Width, camera::kWindow_Height, 0, &window, &renderer);
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
   SDL_RenderClear(renderer);
   SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 
-  camera::Camera camera;
-  map::tMap map = map::Map::getMap();
+  map::Map map;
 
-  draw::draw(WINDOW_WIDTH, WINDOW_HEIGHT, &camera, renderer, map);
+  draw::draw(camera::kWindow_Width, camera::kWindow_Height, &camera, renderer, map);
+  SDL_RenderPresent(renderer);
 
   while (true) {
     while (SDL_PollEvent(&event)) {
@@ -31,11 +30,12 @@ int main() {
   }
 }
 
-void redraw(camera::Camera *camera, map::tMap map, SDL_Renderer *renderer, int pressed_key) {
+void redraw(camera::Camera *camera, map::Map map, SDL_Renderer *renderer, int pressed_key) {
   camera->move(pressed_key);
-  std::cout << camera->getPosition().x << "; " << camera->getPosition().y << std::endl;
+  std::cout << camera->getPosition().x << "; " << camera->getPosition().y << " - " << camera->getFacingDirection() << std::endl;
   draw::clean(renderer);
-  draw::draw(WINDOW_WIDTH, WINDOW_HEIGHT, camera, renderer, map);
+  draw::draw(camera::kWindow_Width, camera::kWindow_Height, camera, renderer, map);
+  SDL_RenderPresent(renderer);
 }
 
 void quit(SDL_Renderer *renderer, SDL_Window *window) {
