@@ -8,7 +8,8 @@ target_link_libraries(isra_test
         GTest::gtest_main
         draw
         camera
-        map)
+        map
+        radians)
 
 include(GoogleTest)
 gtest_discover_tests(isra_test)

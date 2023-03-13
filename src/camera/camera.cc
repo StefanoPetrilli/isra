@@ -23,20 +23,20 @@ void Camera::moveForward() {
 }
 
 void Camera::rotateLeft() {
-  view_direction_ += ROTATE_CONSTANT;
-  if (view_direction_ > 360.0f) view_direction_ = 0.0f;
+  view_direction_in_radians_ += ROTATE_CONSTANT;
+  if (view_direction_in_radians_ > 6.2831853072f) view_direction_in_radians_ = 0.0f;
 }
 
 void Camera::rotateRight() {
-  view_direction_ -= ROTATE_CONSTANT;
-  if (view_direction_ < 0.0f) view_direction_ = 360.0f;
+  view_direction_in_radians_ -= ROTATE_CONSTANT;
+  if (view_direction_in_radians_ < 0.0f) view_direction_in_radians_ = 6.2831853072f;
 }
 
-double Camera::getFacingDirection() const {
-  return view_direction_;
+double Camera::getFacingDirectionInRadians() const {
+  return view_direction_in_radians_;
 }
 Camera::Camera() {
-  view_direction_ = 90.0f;
+  view_direction_in_radians_ = 1.5707963268f;
   position_ = {
       .x = 115.0f, .y = 224.0f
   };
@@ -61,7 +61,7 @@ void Camera::move(int key) {
   }
 }
 
-double Camera::getFOV() {
+double Camera::getFOVInRadians() {
   return kFOV_;
 }
 

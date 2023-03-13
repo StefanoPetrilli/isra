@@ -16,7 +16,9 @@ int main() {
   map::Map map({{0, 0, 0, 1, 1},
                 {0, 0, 0, 0, 1},
                 {0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0}});
+                {0, 0, 0, 0, 0},
+                {1, 0, 0, 0, 0},
+                {1, 1, 0, 0, 0}});
 
   draw::draw(camera::kWindow_Width, camera::kWindow_Height, &camera, renderer, map);
   SDL_RenderPresent(renderer);
@@ -35,7 +37,7 @@ int main() {
 
 void redraw(camera::Camera *camera, map::Map map, SDL_Renderer *renderer, int pressed_key) {
   camera->move(pressed_key);
-  std::cout << camera->getPosition().x << "; " << camera->getPosition().y << " - " << camera->getFacingDirection()
+  std::cout << camera->getPosition().x << "; " << camera->getPosition().y << " - " << camera->getFacingDirectionInRadians()
             << std::endl;
   draw::clean(renderer);
   draw::draw(camera::kWindow_Width, camera::kWindow_Height, camera, renderer, map);

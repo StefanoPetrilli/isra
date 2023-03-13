@@ -6,7 +6,7 @@
 #define ISRA_SRC_PLAYER_CAMERA_H_
 
 #define MOVE_CONSTANT 1
-#define ROTATE_CONSTANT 1
+#define ROTATE_CONSTANT 0.01745329252f
 #define Q_KEY_PRESSED 113
 #define W_KEY_PRESSED 119
 #define E_KEY_PRESSED 101
@@ -25,16 +25,16 @@ struct Position {
 
 class Camera {
   Position position_{};
-  double view_direction_;
+  double view_direction_in_radians_;
   double height_;
-  constexpr static const double kFOV_ = 60.0f;
+  constexpr static const double kFOV_ = 1.0471975512;
   constexpr static const double kDistanceFromProjectionPlane_ = (camera::kWindow_Width / 2.0f) / 1.732050f; //TODO lockup table for tan(kFOV_*3.14159/180);
 
  public:
   Camera();
   void move(int key);
-  double getFacingDirection() const;
-  static double getFOV();
+  double getFacingDirectionInRadians() const;
+  static double getFOVInRadians();
   Position getPosition();
   static double GetDistanceFromProjectionPlane();
 
