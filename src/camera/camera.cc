@@ -72,4 +72,10 @@ double Camera::GetDistanceFromProjectionPlane() {
 Position Camera::getPosition() {
   return position_;
 }
+double Camera::getHeight() {
+  return height_;
+}
+double Camera::getDistanceFromProjectionPlane() {
+  return kDistanceFromProjectionPlane_;
+}
 }

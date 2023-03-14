@@ -8,7 +8,8 @@ namespace draw {
 void draw(int columns_number, int columns_height, camera::Camera *camera, SDL_Renderer *renderer, const map::Map& map) {
   double ray_step = camera::Camera::getFOVInRadians() / columns_number,
       angle = camera->getFacingDirectionInRadians() - (camera::Camera::getFOVInRadians() / 2),
-      horizontal_distance, vertical_distance, height;
+      horizontal_distance, vertical_distance, height, r, straight_line_distance, real_distance, beta;
+  int wall_bottom;
 
   camera::Position horizontal_intersection{}, vertical_intersection{};
 
@@ -22,7 +23,17 @@ void draw(int columns_number, int columns_height, camera::Camera *camera, SDL_Re
 
     auto min = horizontal_distance < vertical_distance ? horizontal_distance : vertical_distance;
     height = kHeightConstant / min;
-    SDL_RenderDrawLine(renderer, current_column, ((columns_height / 2) + height / 2 ), current_column, ((columns_height / 2) - height / 2 ));
+    wall_bottom = floor((columns_height + height) / 2);
+    SDL_RenderDrawLine(renderer, current_column, wall_bottom, current_column, (columns_height - height) / 2);
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+    beta = abs(angle - camera->getFacingDirectionInRadians());
+    for (int current_row = wall_bottom; current_row <= columns_height; ++current_row) {
+      straight_line_distance = camera->getDistanceFromProjectionPlane() * camera->getHeight() / (current_row - (columns_height / 2));
+      real_distance = straight_line_distance / cos(beta);
+      SDL_SetRenderDrawColor(renderer, 0, 255, real_distance < 128 ? 128 : 0, 255);
+      SDL_RenderDrawPoint(renderer, current_column, current_row);
+    }
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
   }
 }
 
