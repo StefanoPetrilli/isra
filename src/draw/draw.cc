@@ -2,13 +2,18 @@
 // Created by Stefano on 3/4/2023.
 //
 
+#include <array>
 #include "draw.h"
 
 namespace draw {
-void draw(int columns_number, int columns_height, camera::Camera *camera, SDL_Renderer *renderer, const map::Map& map) {
+void draw(int columns_number,
+          int columns_height,
+          camera::Camera *camera,
+          std::vector<unsigned char> &pixels,
+          const map::Map &map) {
   double ray_step = camera::Camera::getFOVInRadians() / columns_number,
       angle = camera->getFacingDirectionInRadians() - (camera::Camera::getFOVInRadians() / 2),
-      horizontal_distance, vertical_distance, height, r, straight_line_distance, real_distance, beta;
+      horizontal_distance, vertical_distance, height, straight_line_distance, real_distance, beta;
   int wall_bottom;
 
   camera::Position horizontal_intersection{}, vertical_intersection{};
@@ -23,17 +28,33 @@ void draw(int columns_number, int columns_height, camera::Camera *camera, SDL_Re
 
     auto min = horizontal_distance < vertical_distance ? horizontal_distance : vertical_distance;
     height = kHeightConstant / min;
-    wall_bottom = floor((columns_height + height) / 2);
-    SDL_RenderDrawLine(renderer, current_column, wall_bottom, current_column, (columns_height - height) / 2);
-    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+    wall_bottom = floor((columns_height - height) / 2);
+    setColorLine(pixels,
+                 current_column,
+                 (int) ((columns_height - height) / 2),
+                 (int) ((columns_height + height) / 2),
+                 255,
+                 0,
+                 0);
     beta = abs(angle - camera->getFacingDirectionInRadians());
-    for (int current_row = wall_bottom; current_row <= columns_height; ++current_row) {
-      straight_line_distance = camera->getDistanceFromProjectionPlane() * camera->getHeight() / (current_row - (columns_height / 2));
+    for (int current_row = (int) ((columns_height - height) / 2); current_row > 0; --current_row) {
+      straight_line_distance =
+          camera->getDistanceFromProjectionPlane() * camera->getHeight() / (current_row - (columns_height / 2));
       real_distance = straight_line_distance / cos(beta);
-      SDL_SetRenderDrawColor(renderer, 0, 255, real_distance < 128 ? 128 : 0, 255);
-      SDL_RenderDrawPoint(renderer, current_column, current_row);
+      setColor(current_column, current_row, pixels, 0, 255, 0);
     }
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+  }
+}
+
+void setColorLine(std::vector<unsigned char> &pixels,
+                  int column,
+                  int bottom,
+                  int top,
+                  unsigned char r,
+                  unsigned char g,
+                  unsigned char b) {
+  for (int i = top; i > bottom; --i) {
+    setColor(column, i, pixels, r, g, b);
   }
 }
 
@@ -52,7 +73,7 @@ camera::Position findFirstHorizontalIntersection(camera::Position camera_positio
   return result;
 }
 
-camera::Position findHorizontalWallIntersection(camera::Position camera_position, double angle, const map::Map& map) {
+camera::Position findHorizontalWallIntersection(camera::Position camera_position, double angle, const map::Map &map) {
   double tg = tan(angle);
 
   auto gridIntersection = findFirstHorizontalIntersection(camera_position, angle, tg);
@@ -78,7 +99,7 @@ camera::Position findFirstVerticalIntersection(camera::Position camera_position,
   return result;
 }
 
-camera::Position findVerticalWallIntersection(camera::Position camera_position, double angle, const map::Map& map) {
+camera::Position findVerticalWallIntersection(camera::Position camera_position, double angle, const map::Map &map) {
   double tg = tan(angle);
 
   auto gridIntersection = findFirstVerticalIntersection(camera_position, angle, tg);
@@ -120,5 +141,18 @@ bool isLeft(double angle) {
 
 bool isUp(double angle) {
   return angle < radians::k180_degree;
+}
+
+void setColor(int column,
+              int row,
+              std::vector<unsigned char> &pixels,
+              unsigned char r,
+              unsigned char g,
+              unsigned char b) {
+  auto index = (column + (row * camera::kWindow_Width)) * 3;
+  if (index > 1620000) return;
+  pixels[index] = r;
+  pixels[index + 1] = g;
+  pixels[index + 2] = b;
 }
 }

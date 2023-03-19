@@ -16,8 +16,7 @@ namespace draw {
 
 const static double kHeightConstant = map::kBlockSize * camera::Camera::GetDistanceFromProjectionPlane();
 
-void draw(int columns_number, int columns_height, camera::Camera *camera, SDL_Renderer *renderer, const map::Map& map);
-void clean(SDL_Renderer *renderer);
+void draw(int columns_number, int columns_height, camera::Camera *camera, std::vector<unsigned char> &pixels, const map::Map& map);
 bool isWall(camera::Position position, map::Map map);
 camera::Position findHorizontalWallIntersection(camera::Position camera_position, double angle, const map::Map& map);
 camera::Position findVerticalWallIntersection(camera::Position camera_position, double angle, const map::Map& map);
@@ -28,5 +27,7 @@ bool isInside(camera::Position position, map::Map map_1);
 double findDistance(camera::Position intersection_position, camera::Position camera_position);
 bool isLeft(double angle);
 bool isUp(double angle);
+void setColor(int column, int row, std::vector<unsigned char> &pixels, unsigned char r, unsigned char g, unsigned char b);
+void setColorLine(std::vector<unsigned char> &vector, int column, int bottom, int top, unsigned char r, unsigned char g, unsigned char b);
 }
 #endif //ISRA_SRC_DRAW_H_
