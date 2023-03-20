@@ -2,6 +2,7 @@
 // Created by Stefano on 3/4/2023.
 //
 
+#include <GLFW/glfw3.h>
 #include "camera.h"
 
 namespace camera {
@@ -45,17 +46,17 @@ Camera::Camera() {
 
 void Camera::move(int key) {
   switch (key) {
-    case (Q_KEY_PRESSED): rotateLeft();
+    case (GLFW_KEY_Q): rotateLeft();
       break;
-    case (W_KEY_PRESSED): moveForward();
+    case (GLFW_KEY_W): moveForward();
       break;
-    case (E_KEY_PRESSED): rotateRight();
+    case (GLFW_KEY_E): rotateRight();
       break;
-    case (A_KEY_PRESSED): moveLeft();
+    case (GLFW_KEY_A): moveLeft();
       break;
-    case (S_KEY_PRESSED): moveBackward();
+    case (GLFW_KEY_S): moveBackward();
       break;
-    case (D_KEY_PRESSED): moveRight();
+    case (GLFW_KEY_D): moveRight();
       break;
     default:break;
   }
@@ -72,7 +73,7 @@ double Camera::GetDistanceFromProjectionPlane() {
 Position Camera::getPosition() {
   return position_;
 }
-double Camera::getHeight() {
+double Camera::getHeight() const {
   return height_;
 }
 double Camera::getDistanceFromProjectionPlane() {

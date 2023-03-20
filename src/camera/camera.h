@@ -37,8 +37,8 @@ class Camera {
   static double getFOVInRadians();
   Position getPosition();
   static double GetDistanceFromProjectionPlane();
-  double getHeight();
-  double getDistanceFromProjectionPlane();
+  double getHeight() const;
+  static double getDistanceFromProjectionPlane();
 
  protected:
   void moveForward();

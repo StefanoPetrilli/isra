@@ -58,12 +58,6 @@ void setColorLine(std::vector<unsigned char> &pixels,
   }
 }
 
-void clean(SDL_Renderer *renderer) {
-  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-  SDL_RenderClear(renderer);
-  SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-}
-
 camera::Position findFirstHorizontalIntersection(camera::Position camera_position, double angle, double tg) {
   camera::Position result{};
 
@@ -154,5 +148,9 @@ void setColor(int column,
   pixels[index] = r;
   pixels[index + 1] = g;
   pixels[index + 2] = b;
+}
+
+void flush_pixels(std::vector<unsigned char> &vector) {
+  std::fill(vector.begin(), vector.end(), 0);
 }
 }

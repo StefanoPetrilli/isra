@@ -25,13 +25,14 @@ int main() {
     exit(EXIT_FAILURE);
   }
 
+  glfwSetWindowUserPointer(window, &camera);
+
   glfwSetKeyCallback(window, key_callback);
   glfwMakeContextCurrent(window);
   glfwSwapInterval(1);
   gladLoadGL(glfwGetProcAddress);
 
   std::vector<unsigned char> pixels(camera::kWindow_Width * camera::kWindow_Height * 3, 0);
-  //std::fill_n(pixels, camera::kWindow_Width * camera::kWindow_Height, 0);
 
   glGenTextures(1, &texture);
   glBindTexture(GL_TEXTURE_2D, texture);
@@ -98,15 +99,14 @@ void redraw(camera::Camera *camera, map::Map map, std::vector<unsigned char> &pi
   std::cout << camera->getPosition().x << "; " << camera->getPosition().y << " - "
             << camera->getFacingDirectionInRadians()
             << std::endl;
+  draw::flush_pixels(pixels);
   draw::draw(camera::kWindow_Width, camera::kWindow_Height, camera, pixels, map);
 }
 
 static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
-  switch (key) {
-    case (GLFW_KEY_ESCAPE): glfwSetWindowShouldClose(window, GLFW_TRUE);
-      //case (GLFW_KEY_W): redraw(&camera, map, renderer, event.key.keysym.sym);
-      //  break;
-  }
+  if (action == GLFW_RELEASE) return;
+  key == GLFW_KEY_ESCAPE ? glfwSetWindowShouldClose(window, GLFW_TRUE) : ((camera::Camera *) glfwGetWindowUserPointer(
+      window))->move(key);
 }
 
 static void error_callback(int error, const char *description) {
