@@ -2,7 +2,6 @@
 // Created by Stefano on 3/4/2023.
 //
 
-#include <GLFW/glfw3.h>
 #include "camera.h"
 
 namespace camera {

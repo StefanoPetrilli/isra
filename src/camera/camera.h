@@ -4,15 +4,10 @@
 
 #ifndef ISRA_SRC_PLAYER_CAMERA_H_
 #define ISRA_SRC_PLAYER_CAMERA_H_
+#include <GLFW/glfw3.h>
 
 #define MOVE_CONSTANT 1
 #define ROTATE_CONSTANT 0.01745329252f
-#define Q_KEY_PRESSED 113
-#define W_KEY_PRESSED 119
-#define E_KEY_PRESSED 101
-#define A_KEY_PRESSED 97
-#define S_KEY_PRESSED 115
-#define D_KEY_PRESSED 100
 
 namespace camera {
 const static int kWindow_Width = 900;

@@ -5,7 +5,6 @@
 #ifndef ISRA_SRC_DRAW_H_
 #define ISRA_SRC_DRAW_H_
 
-#include <SDL2/SDL.h>
 #include <cmath>
 #include <iostream>
 #include <map.h>

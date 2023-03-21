@@ -33,5 +33,8 @@ if (GLEW_FOUND)
     include_directories(${GLEW_INCLUDE_DIRS})
 endif()
 
+#GLES2
+find_library(GLES2-lib GLESv2)
+
 add_subdirectory(src)
 add_subdirectory(test)
