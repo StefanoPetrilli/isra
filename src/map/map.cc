@@ -19,7 +19,7 @@ bool Map::isWall(int x, int y) {
 }
 
 Map::Map(tMap map) {
-  map_ = map;
+  map_ = std::move(map);
 }
 
 }

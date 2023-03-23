@@ -4,7 +4,7 @@
 
 #ifndef ISRA_SRC_RADIANS_RADIANS_H_
 #define ISRA_SRC_RADIANS_RADIANS_H_
-namespace radians {
+namespace geometry {
 const double k60_degree = 1.0471975512f;
 const double k90_degree = 1.5707963268f;
 const double k120_degree = 2.0943951024f;

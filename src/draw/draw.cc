@@ -130,11 +130,11 @@ double findDistance(camera::Position intersection_position, camera::Position cam
 }
 
 bool isLeft(double angle) {
-  return (angle > radians::k90_degree && angle < radians::k270_degree);
+  return (angle > geometry::k90_degree && angle < geometry::k270_degree);
 }
 
 bool isUp(double angle) {
-  return angle < radians::k180_degree;
+  return angle < geometry::k180_degree;
 }
 
 void setColor(int column,
