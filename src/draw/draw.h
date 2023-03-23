@@ -7,9 +7,12 @@
 
 #include <cmath>
 #include <iostream>
+#include <array>
+
 #include <map.h>
 #include <camera.h>
 #include <geometry.h>
+#include <position.h>
 
 namespace draw {
 
@@ -20,14 +23,14 @@ void draw(int columns_number,
           camera::Camera *camera,
           std::vector<unsigned char> &pixels,
           const map::Map &map);
-bool isWall(camera::Position position, map::Map map);
-camera::Position findHorizontalWallIntersection(camera::Position camera_position, double angle, const map::Map &map);
-camera::Position findVerticalWallIntersection(camera::Position camera_position, double angle, const map::Map &map);
-camera::Position findFirstHorizontalIntersection(camera::Position camera_position, double angle, double tg);
-camera::Position findFirstVerticalIntersection(camera::Position camera_position, double angle, double tg);
+bool isWall(position::Position position, map::Map map);
+position::Position findHorizontalWallIntersection(position::Position camera_position, double angle, const map::Map &map);
+position::Position findVerticalWallIntersection(position::Position camera_position, double angle, const map::Map &map);
+position::Position findFirstHorizontalIntersection(position::Position camera_position, double angle, double tg);
+position::Position findFirstVerticalIntersection(position::Position camera_position, double angle, double tg);
 int mapToMap(double x);
-bool isInside(camera::Position position, map::Map map_1);
-double findDistance(camera::Position intersection_position, camera::Position camera_position);
+bool isInside(position::Position position, map::Map map_1);
+double findDistance(position::Position intersection_position, position::Position camera_position);
 bool isLeft(double angle);
 bool isUp(double angle);
 void setColor(int column,

@@ -2,7 +2,6 @@
 // Created by Stefano on 3/4/2023.
 //
 
-#include <array>
 #include "draw.h"
 
 namespace draw {
@@ -16,7 +15,7 @@ void draw(int columns_number,
       horizontal_distance, vertical_distance, height, straight_line_distance, real_distance, beta;
   int wall_bottom;
 
-  camera::Position horizontal_intersection{}, vertical_intersection{};
+  position::Position horizontal_intersection{}, vertical_intersection{};
 
   for (int current_column = columns_number; current_column > 0; angle += ray_step, --current_column) {
 
@@ -58,8 +57,8 @@ void setColorLine(std::vector<unsigned char> &pixels,
   }
 }
 
-camera::Position findFirstHorizontalIntersection(camera::Position camera_position, double angle, double tg) {
-  camera::Position result{};
+position::Position findFirstHorizontalIntersection(position::Position camera_position, double angle, double tg) {
+  position::Position result{};
 
   result.y = floor(camera_position.y / map::kBlockSize) * map::kBlockSize + (isUp(angle) ? -1.0f : 64.0f);
   result.x = camera_position.x + (camera_position.y - result.y) / tg;
@@ -67,7 +66,7 @@ camera::Position findFirstHorizontalIntersection(camera::Position camera_positio
   return result;
 }
 
-camera::Position findHorizontalWallIntersection(camera::Position camera_position, double angle, const map::Map &map) {
+position::Position findHorizontalWallIntersection(position::Position camera_position, double angle, const map::Map &map) {
   double tg = tan(angle);
 
   auto gridIntersection = findFirstHorizontalIntersection(camera_position, angle, tg);
@@ -84,8 +83,8 @@ camera::Position findHorizontalWallIntersection(camera::Position camera_position
   return {.x = HUGE_VAL, .y = HUGE_VAL};
 }
 
-camera::Position findFirstVerticalIntersection(camera::Position camera_position, double angle, double tg) {
-  camera::Position result{};
+position::Position findFirstVerticalIntersection(position::Position camera_position, double angle, double tg) {
+  position::Position result{};
 
   result.x = (floor(camera_position.x / map::kBlockSize) * map::kBlockSize) + (isLeft(angle) ? -1 : map::kBlockSize);
   result.y = camera_position.y + ((camera_position.x - result.x) * tg);
@@ -93,7 +92,7 @@ camera::Position findFirstVerticalIntersection(camera::Position camera_position,
   return result;
 }
 
-camera::Position findVerticalWallIntersection(camera::Position camera_position, double angle, const map::Map &map) {
+position::Position findVerticalWallIntersection(position::Position camera_position, double angle, const map::Map &map) {
   double tg = tan(angle);
 
   auto gridIntersection = findFirstVerticalIntersection(camera_position, angle, tg);
@@ -110,12 +109,12 @@ camera::Position findVerticalWallIntersection(camera::Position camera_position, 
   return {.x = HUGE_VAL, .y = HUGE_VAL};
 }
 
-bool isInside(camera::Position position, map::Map map) {
+bool isInside(position::Position position, map::Map map) {
   double x = mapToMap(position.x), y = mapToMap(position.y);
   return (x >= 0.0f && y >= 0.0f) && (x < map.getWidth() && y < map.getHeight());
 }
 
-bool isWall(camera::Position position, map::Map map) {
+bool isWall(position::Position position, map::Map map) {
   double x = mapToMap(position.x), y = mapToMap(position.y);
   return map.isWall(x, y);
 }
@@ -124,7 +123,7 @@ int mapToMap(double x) {
   return floor(x / map::kBlockSize);
 }
 
-double findDistance(camera::Position intersection_position, camera::Position camera_position) {
+double findDistance(position::Position intersection_position, position::Position camera_position) {
   return sqrt(
       pow(intersection_position.x - camera_position.x, 2) + pow(intersection_position.y - camera_position.y, 2));
 }

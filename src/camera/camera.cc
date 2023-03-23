@@ -70,7 +70,7 @@ double Camera::GetDistanceFromProjectionPlane() {
   return kDistanceFromProjectionPlane_;
 }
 
-Position Camera::getPosition() {
+position::Position Camera::getPosition() {
   return position_;
 }
 double Camera::getHeight() const {
