@@ -8,7 +8,6 @@ namespace window {
 Window::Window(int width,
                int height,
                const std::string &window_name,
-               std::vector<unsigned char> &pixels,
                camera::Camera *camera) {
 
   glfwSetErrorCallback(error_callback);
@@ -41,7 +40,7 @@ Window::Window(int width,
                0,
                GL_RGB,
                GL_UNSIGNED_BYTE,
-               pixels.data());
+               camera->GetPixels().data());
   glTexSubImage2D(GL_TEXTURE_2D,
                   0,
                   0,
@@ -50,7 +49,7 @@ Window::Window(int width,
                   camera::kWindow_Height,
                   GL_RGB,
                   GL_UNSIGNED_BYTE,
-                  pixels.data());
+                  camera->GetPixels().data());
 
   glGenFramebuffers(1, &readFboId_);
   glBindFramebuffer(GL_READ_FRAMEBUFFER, readFboId_);
@@ -60,13 +59,13 @@ Window::Window(int width,
 
 }
 
-void Window::mainLoop(std::vector<unsigned char> &pixels, camera::Camera *camera, const map::Map &map) {
+void Window::mainLoop(camera::Camera *camera, const map::Map &map) {
   while (!glfwWindowShouldClose(window_)) {
     std::cout << camera->getPosition().x << "; " << camera->getPosition().y << " - "
               << camera->getFacingDirectionInRadians()
               << std::endl;
-    draw::flush_pixels(pixels);
-    draw::draw(camera::kWindow_Width, camera::kWindow_Height, camera, pixels, map);
+    draw::flush_pixels(camera->GetPixels());
+    draw::draw(camera::kWindow_Width, camera::kWindow_Height, camera, camera->GetPixels(), map);
 
     glTexSubImage2D(GL_TEXTURE_2D,
                     0,
@@ -76,7 +75,7 @@ void Window::mainLoop(std::vector<unsigned char> &pixels, camera::Camera *camera
                     camera::kWindow_Height,
                     GL_RGB,
                     GL_UNSIGNED_BYTE,
-                    pixels.data());
+                    camera->GetPixels().data());
 
     glBindFramebuffer(GL_READ_FRAMEBUFFER, readFboId_);
     glBlitFramebuffer(0, 0, camera::kWindow_Width,

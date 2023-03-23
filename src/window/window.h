@@ -28,9 +28,8 @@ class Window {
   Window(int width,
          int height,
          const std::string &window_name,
-         std::vector<unsigned char> &pixels,
          camera::Camera *camera);
-  void mainLoop(std::vector<unsigned char> &pixels, camera::Camera *camera, const map::Map &map);
+  void mainLoop(camera::Camera *camera, const map::Map &map);
 };
 }
 

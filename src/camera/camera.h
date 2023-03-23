@@ -5,6 +5,7 @@
 #ifndef ISRA_SRC_PLAYER_CAMERA_H_
 #define ISRA_SRC_PLAYER_CAMERA_H_
 #include <GLFW/glfw3.h>
+#include <vector>
 
 #define MOVE_CONSTANT 1
 #define ROTATE_CONSTANT 0.01745329252f
@@ -24,6 +25,7 @@ class Camera {
   double height_;
   constexpr static const double kFOV_ = 1.0471975512;
   constexpr static const double kDistanceFromProjectionPlane_ = (camera::kWindow_Width / 2.0f) / 1.732050f; //TODO lockup table for tan(kFOV_*3.14159/180);
+  std::vector<unsigned char> pixels_;
 
  public:
   Camera();
@@ -34,6 +36,7 @@ class Camera {
   static double GetDistanceFromProjectionPlane();
   double getHeight() const;
   static double getDistanceFromProjectionPlane();
+  std::vector<unsigned char>& GetPixels();
 
  protected:
   void moveForward();
