@@ -6,6 +6,70 @@
 
 namespace camera {
 
+void Camera::draw(int columns_number,
+                  int columns_height,
+                  camera::Camera *camera,
+                  std::vector<unsigned char> &pixels,
+                  const map::Map &map) {
+  double ray_step = camera::Camera::getFOVInRadians() / columns_number,
+      angle = camera->getFacingDirectionInRadians() - (camera::Camera::getFOVInRadians() / 2),
+      horizontal_distance, vertical_distance, height, straight_line_distance, real_distance, beta;
+  int wall_bottom;
+
+  position::Position horizontal_intersection{}, vertical_intersection{};
+
+  for (int current_column = columns_number; current_column > 0; angle += ray_step, --current_column) {
+
+    horizontal_intersection = geometry::findHorizontalWallIntersection(camera->getPosition(), angle, map);
+    vertical_intersection = geometry::findVerticalWallIntersection(camera->getPosition(), angle, map);
+
+    horizontal_distance = geometry::findDistance(horizontal_intersection, camera->getPosition());
+    vertical_distance = geometry::findDistance(vertical_intersection, camera->getPosition());
+
+    auto min = horizontal_distance < vertical_distance ? horizontal_distance : vertical_distance;
+    height = kHeightConstant / min;
+    wall_bottom = floor((columns_height - height) / 2);
+    setColorLine(pixels,
+                 current_column,
+                 (int) ((columns_height - height) / 2),
+                 (int) ((columns_height + height) / 2),
+                 255,
+                 0,
+                 0);
+    beta = abs(angle - camera->getFacingDirectionInRadians());
+    for (int current_row = (int) ((columns_height - height) / 2); current_row > 0; --current_row) {
+      straight_line_distance =
+          kDistanceFromProjectionPlane_ * camera->getHeight() / (current_row - (columns_height / 2));
+      real_distance = straight_line_distance / cos(beta);
+      setColor(current_column, current_row, pixels, 0, 255, 0);
+    }
+  }
+}
+void Camera::setColorLine(std::vector<unsigned char> &pixels,
+                          int column,
+                          int bottom,
+                          int top,
+                          unsigned char r,
+                          unsigned char g,
+                          unsigned char b) {
+  for (int i = top; i > bottom; --i) {
+    setColor(column, i, pixels, r, g, b);
+  }
+}
+
+void Camera::setColor(int column,
+                      int row,
+                      std::vector<unsigned char> &pixels,
+                      unsigned char r,
+                      unsigned char g,
+                      unsigned char b) {
+  auto index = (column + (row * camera::kWindow_Width)) * 3;
+  if (index > 1620000) return;
+  pixels[index] = r;
+  pixels[index + 1] = g;
+  pixels[index + 2] = b;
+}
+
 void Camera::moveLeft() {
   position_.x -= MOVE_CONSTANT;
 }
@@ -66,20 +130,20 @@ double Camera::getFOVInRadians() {
   return kFOV_;
 }
 
-double Camera::GetDistanceFromProjectionPlane() {
-  return kDistanceFromProjectionPlane_;
-}
-
 position::Position Camera::getPosition() {
   return position_;
 }
 double Camera::getHeight() const {
   return height_;
 }
-double Camera::getDistanceFromProjectionPlane() {
-  return kDistanceFromProjectionPlane_;
-}
-std::vector<unsigned char>& Camera::GetPixels() {
+//double Camera::getDistanceFromProjectionPlane() {
+//  return kDistanceFromProjectionPlane_;
+//}
+std::vector<unsigned char> &Camera::GetPixels() {
   return pixels_;
+}
+
+void Camera::FlushPixels() {
+  std::fill(pixels_.begin(), pixels_.end(), 0);
 }
 }

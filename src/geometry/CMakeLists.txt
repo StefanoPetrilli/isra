@@ -1,5 +1,5 @@
 add_library(geometry
-        geometry.h)
+        geometry.cc geometry.h)
 
-set_target_properties(geometry PROPERTIES LINKER_LANGUAGE CXX)
+target_link_libraries(geometry PUBLIC map position)
 target_include_directories(geometry PUBLIC .)

@@ -3,6 +3,7 @@
 //
 
 #include "window.h"
+#include "camera.h"
 
 namespace window {
 Window::Window(int width,
@@ -64,8 +65,10 @@ void Window::mainLoop(camera::Camera *camera, const map::Map &map) {
     std::cout << camera->getPosition().x << "; " << camera->getPosition().y << " - "
               << camera->getFacingDirectionInRadians()
               << std::endl;
-    draw::flush_pixels(camera->GetPixels());
-    draw::draw(camera::kWindow_Width, camera::kWindow_Height, camera, camera->GetPixels(), map);
+
+    camera->FlushPixels();
+
+    camera->draw(camera::kWindow_Width, camera::kWindow_Height, camera, camera->GetPixels(), map);
 
     glTexSubImage2D(GL_TEXTURE_2D,
                     0,
@@ -97,7 +100,11 @@ void Window::error_callback(int error, const char *description) {
   std::cerr << "Error " << error << ": " << description << std::endl;
 }
 
-void Window::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+void Window::key_callback(GLFWwindow *window,
+                          int key,
+                          [[maybe_unused]] int scancode,
+                          [[maybe_unused]] int action,
+                          [[maybe_unused]] int mods) {
   key == GLFW_KEY_ESCAPE ? glfwSetWindowShouldClose(window, GLFW_TRUE) : ((camera::Camera *) glfwGetWindowUserPointer(
       window))->move(key);
 }
