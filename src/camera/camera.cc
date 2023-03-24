@@ -11,39 +11,55 @@ void Camera::draw(int columns_number,
                   camera::Camera *camera,
                   std::vector<unsigned char> &pixels,
                   map::Map &map) {
-  double ray_step = camera::Camera::getFOVInRadians() / columns_number,
-      angle = camera->getFacingDirectionInRadians() - (camera::Camera::getFOVInRadians() / 2),
-      horizontal_distance, vertical_distance, height, straight_line_distance, real_distance, beta;
-  int wall_bottom;
-
-  position::Position horizontal_intersection{}, vertical_intersection{};
+  double ray_step = camera::Camera::getFOVInRadians() / columns_number;
+  double angle = camera->getFacingDirectionInRadians() - (camera::Camera::getFOVInRadians() / 2);
 
   for (int current_column = columns_number; current_column > 0; angle += ray_step, --current_column) {
-    horizontal_intersection = geometry::findHorizontalWallIntersection(camera->getPosition(), angle, map);
-    vertical_intersection = geometry::findVerticalWallIntersection(camera->getPosition(), angle, map);
-
-    horizontal_distance = geometry::findDistance(horizontal_intersection, camera->getPosition());
-    vertical_distance = geometry::findDistance(vertical_intersection, camera->getPosition());
-
-    auto min = horizontal_distance < vertical_distance ? horizontal_distance : vertical_distance;
-    height = kHeightConstant / min;
-    wall_bottom = floor((columns_height - height) / 2);
-    setColorLine(pixels,
-                 current_column,
-                 wall_bottom,
-                 (int) ((columns_height + height) / 2),
-                 255,
-                 0,
-                 0);
-    beta = abs(angle - camera->getFacingDirectionInRadians());
-    for (int current_row = (int) ((columns_height - height) / 2); current_row > 0; --current_row) {
-      straight_line_distance =
-          kDistanceFromProjectionPlane_ * camera->getHeight() / (current_row - (columns_height / 2));
-      real_distance = straight_line_distance / cos(beta);
-      setColor(current_column, current_row, pixels, 0, 255, 0);
-    }
+    drawColumn(current_column, angle, columns_height, camera, pixels, map);
   }
 }
+
+void Camera::drawColumn(int current_column,
+                        double angle,
+                        int columns_height,
+                        Camera *camera,
+                        std::vector<unsigned char> &pixels,
+                        map::Map &map) {
+  position::Position
+      horizontal_intersection = geometry::findHorizontalWallIntersection(camera->getPosition(), angle, map);
+  position::Position vertical_intersection = geometry::findVerticalWallIntersection(camera->getPosition(), angle, map);
+
+  double horizontal_distance = geometry::findDistance(horizontal_intersection, camera->getPosition());
+  double vertical_distance = geometry::findDistance(vertical_intersection, camera->getPosition());
+
+  auto min_distance = std::min(horizontal_distance, vertical_distance);
+  double height = kHeightConstant / min_distance;
+  setColorLine(pixels,
+               current_column,
+               (int) floor((columns_height - height) / 2),
+               (int) ((columns_height + height) / 2),
+               255,
+               0,
+               0);
+  drawFloor(current_column, angle, columns_height, height, camera, pixels);
+}
+
+void Camera::drawFloor(int current_column,
+                       double angle,
+                       int columns_height,
+                       double height,
+                       Camera *camera,
+                       std::vector<unsigned char> &pixels) {
+  double beta = std::abs(angle - camera->getFacingDirectionInRadians());
+
+  for (int current_row = (int) ((columns_height - height) / 2); current_row > 0; --current_row) {
+    double straight_line_distance =
+        kDistanceFromProjectionPlane_ * camera->getHeight() / (current_row - (columns_height / 2));
+    double real_distance = straight_line_distance / cos(beta);
+    setColor(current_column, current_row, pixels, 0, 255, 0);
+  }
+}
+
 void Camera::setColorLine(std::vector<unsigned char> &pixels,
                           int column,
                           int bottom,
