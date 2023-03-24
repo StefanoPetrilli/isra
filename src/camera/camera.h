@@ -63,11 +63,17 @@ class Camera {
                          std::vector<unsigned char> &pixels,
                          map::Map &map);
   static void drawFloor(int current_column,
-                        double angle,
+                        double beta,
                         int columns_height,
                         double height,
                         Camera *camera,
-                        std::vector<unsigned char> &vector);
+                        std::vector<unsigned char> &pixels);
+  static void drawCeiling(int current_column,
+                          double beta,
+                          int columns_height,
+                          double height,
+                          Camera *camera,
+                          std::vector<unsigned char> &pixels);
 };
 
 }

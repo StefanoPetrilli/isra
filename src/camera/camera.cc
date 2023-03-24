@@ -39,22 +39,40 @@ void Camera::drawColumn(int current_column,
                (int) floor((columns_height - height) / 2),
                (int) ((columns_height + height) / 2),
                color::kRed);
-  drawFloor(current_column, angle, columns_height, height, camera, pixels);
+  double beta = std::abs(angle - camera->getFacingDirectionInRadians());
+  drawFloor(current_column, beta, columns_height, height, camera, pixels);
+  drawCeiling(current_column, beta, columns_height, height, camera, pixels);
 }
 
 void Camera::drawFloor(int current_column,
-                       double angle,
+                       double beta,
                        int columns_height,
                        double height,
                        Camera *camera,
                        std::vector<unsigned char> &pixels) {
-  double beta = std::abs(angle - camera->getFacingDirectionInRadians());
+  double straight_line_distance, real_distance;
 
   for (int current_row = (int) ((columns_height - height) / 2); current_row > 0; --current_row) {
-    double straight_line_distance =
+    straight_line_distance =
         kDistanceFromProjectionPlane_ * camera->getHeight() / (current_row - (columns_height / 2));
-    double real_distance = straight_line_distance / cos(beta);
+    real_distance = straight_line_distance / cos(beta);
     setColor(current_column, current_row, pixels, color::kGreen);
+  }
+}
+
+void Camera::drawCeiling(int current_column,
+                         double beta,
+                         int columns_height,
+                         double height,
+                         Camera *camera,
+                         std::vector<unsigned char> &pixels) {
+  double straight_line_distance, real_distance;
+
+  for (int current_row = (int) ((columns_height + height) / 2); current_row < 600; ++current_row) {
+    straight_line_distance =
+        kDistanceFromProjectionPlane_ * camera->getHeight() / (current_row - (columns_height / 2));
+    real_distance = straight_line_distance / cos(beta);
+    setColor(current_column, current_row, pixels, color::kBlue);
   }
 }
 
@@ -69,6 +87,10 @@ void Camera::setColor(int column, int row, std::vector<unsigned char> &pixels, c
   pixels[index] = color.r;
   pixels[index + 1] = color.g;
   pixels[index + 2] = color.b;
+}
+
+void Camera::FlushPixels() {
+  std::fill(pixels_.begin(), pixels_.end(), 0);
 }
 
 void Camera::moveLeft() {
@@ -142,7 +164,4 @@ std::vector<unsigned char> &Camera::GetPixels() {
   return pixels_;
 }
 
-void Camera::FlushPixels() {
-  std::fill(pixels_.begin(), pixels_.end(), 0);
-}
 }
