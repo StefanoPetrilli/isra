@@ -89,10 +89,6 @@ void Camera::setColor(int column, int row, std::vector<unsigned char> &pixels, c
   pixels[index + 2] = color.b;
 }
 
-void Camera::FlushPixels() {
-  std::fill(pixels_.begin(), pixels_.end(), 0);
-}
-
 void Camera::moveLeft() {
   position_.x -= MOVE_CONSTANT;
 }
