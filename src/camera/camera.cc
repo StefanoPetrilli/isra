@@ -10,7 +10,7 @@ void Camera::draw(int columns_number,
                   int columns_height,
                   camera::Camera *camera,
                   std::vector<unsigned char> &pixels,
-                  const map::Map &map) {
+                  map::Map &map) {
   double ray_step = camera::Camera::getFOVInRadians() / columns_number,
       angle = camera->getFacingDirectionInRadians() - (camera::Camera::getFOVInRadians() / 2),
       horizontal_distance, vertical_distance, height, straight_line_distance, real_distance, beta;
@@ -19,7 +19,6 @@ void Camera::draw(int columns_number,
   position::Position horizontal_intersection{}, vertical_intersection{};
 
   for (int current_column = columns_number; current_column > 0; angle += ray_step, --current_column) {
-
     horizontal_intersection = geometry::findHorizontalWallIntersection(camera->getPosition(), angle, map);
     vertical_intersection = geometry::findVerticalWallIntersection(camera->getPosition(), angle, map);
 
@@ -31,7 +30,7 @@ void Camera::draw(int columns_number,
     wall_bottom = floor((columns_height - height) / 2);
     setColorLine(pixels,
                  current_column,
-                 (int) ((columns_height - height) / 2),
+                 wall_bottom,
                  (int) ((columns_height + height) / 2),
                  255,
                  0,
@@ -64,7 +63,6 @@ void Camera::setColor(int column,
                       unsigned char g,
                       unsigned char b) {
   auto index = (column + (row * camera::kWindow_Width)) * 3;
-  if (index > 1620000) return;
   pixels[index] = r;
   pixels[index + 1] = g;
   pixels[index + 2] = b;
@@ -103,7 +101,7 @@ Camera::Camera() {
   pixels_ = std::vector<unsigned char>(kWindow_Width * kWindow_Height * 3, 0);
   view_direction_in_radians_ = 1.5707963268f;
   position_ = {
-      .x = 115.0f, .y = 224.0f
+      .x = 100.0f, .y = 350.0f
   };
   height_ = 60.0f;
 }
@@ -136,9 +134,7 @@ position::Position Camera::getPosition() {
 double Camera::getHeight() const {
   return height_;
 }
-//double Camera::getDistanceFromProjectionPlane() {
-//  return kDistanceFromProjectionPlane_;
-//}
+
 std::vector<unsigned char> &Camera::GetPixels() {
   return pixels_;
 }

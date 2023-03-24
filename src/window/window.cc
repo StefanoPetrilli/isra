@@ -60,7 +60,7 @@ Window::Window(int width,
 
 }
 
-void Window::mainLoop(camera::Camera *camera, const map::Map &map) {
+void Window::mainLoop(camera::Camera *camera, map::Map &map) {
   while (!glfwWindowShouldClose(window_)) {
     std::cout << camera->getPosition().x << "; " << camera->getPosition().y << " - "
               << camera->getFacingDirectionInRadians()

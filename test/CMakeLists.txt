@@ -1,15 +1,13 @@
 add_executable(isra_test
-        main_test.cc
-        )
+        main_test.cc)
 
 target_link_libraries(isra_test
         PUBLIC
-        ${SDL2_LIBRARIES}
         GTest::gtest_main
-        draw
+        position
         camera
         map
-        radians)
+        geometry)
 
 include(GoogleTest)
 gtest_discover_tests(isra_test)

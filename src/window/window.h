@@ -28,7 +28,7 @@ class Window {
          int height,
          const std::string &window_name,
          camera::Camera *camera);
-  void mainLoop(camera::Camera *camera, const map::Map &map);
+  void mainLoop(camera::Camera *camera, map::Map &map);
 };
 }
 

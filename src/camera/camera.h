@@ -20,7 +20,7 @@
 namespace camera {
 const static int kWindow_Width = 900;
 const static int kWindow_Height = 600;
-const static double kHeightConstant = map::kBlockSize * (camera::kWindow_Width / 2.0f) / 1.732050f;;
+const static double kHeightConstant = map::kBlockSize * (camera::kWindow_Width / 2.0f) / 1.732050f;
 constexpr static const double kDistanceFromProjectionPlane_ =
     (camera::kWindow_Width / 2.0f) / 1.732050f; //TODO lockup table for tan(kFOV_*3.14159/180);
 
@@ -37,16 +37,14 @@ class Camera {
   double getFacingDirectionInRadians() const;
   static double getFOVInRadians();
   position::Position getPosition();
-  static double GetDistanceFromProjectionPlane();
   double getHeight() const;
-  static double getDistanceFromProjectionPlane();
   std::vector<unsigned char> &GetPixels();
   void FlushPixels();
   void draw(int columns_number,
             int columns_height,
             camera::Camera *camera,
             std::vector<unsigned char> &pixels,
-            const map::Map &map);
+            map::Map &map);
 
  private:
   void moveForward();
@@ -62,7 +60,7 @@ class Camera {
                     unsigned char r,
                     unsigned char g,
                     unsigned char b);
-  void setColor(int column,
+  static void setColor(int column,
                 int row,
                 std::vector<unsigned char> &pixels,
                 unsigned char r,

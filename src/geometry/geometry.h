@@ -20,15 +20,12 @@ const double k270_degree = 4.7123889804f;
 const double k300_degree = 5.235987756f;
 const double k330_degree = 5.759586531f;
 
-int mapToMap(double x);
-bool isInside(position::Position position, map::Map map_1);
-bool isWall(position::Position position, map::Map map);
 position::Position findFirstHorizontalIntersection(position::Position camera_position, double angle, double tg);
 position::Position findHorizontalWallIntersection(position::Position camera_position,
                                                   double angle,
-                                                  const map::Map &map);
+                                                  map::Map &map);
 position::Position findFirstVerticalIntersection(position::Position camera_position, double angle, double tg);
-position::Position findVerticalWallIntersection(position::Position camera_position, double angle, const map::Map &map);
+position::Position findVerticalWallIntersection(position::Position camera_position, double angle, map::Map &map);
 double findDistance(position::Position intersection_position, position::Position camera_position);
 bool isLeft(double angle);
 bool isUp(double angle);

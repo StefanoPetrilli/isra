@@ -17,13 +17,13 @@ position::Position findFirstHorizontalIntersection(position::Position camera_pos
 
 position::Position findHorizontalWallIntersection(position::Position camera_position,
                                                   double angle,
-                                                  const map::Map &map) {
+                                                  map::Map &map) {
   double tg = tan(angle);
 
   auto gridIntersection = findFirstHorizontalIntersection(camera_position, angle, tg);
 
-  while (isInside(gridIntersection, map)) {
-    if (isWall(gridIntersection, map)) {
+  while (map.isInside(gridIntersection)) {
+    if (map.isWall(gridIntersection)) {
       return gridIntersection;
     }
 
@@ -44,13 +44,13 @@ position::Position findFirstVerticalIntersection(position::Position camera_posit
   return result;
 }
 
-position::Position findVerticalWallIntersection(position::Position camera_position, double angle, const map::Map &map) {
+position::Position findVerticalWallIntersection(position::Position camera_position, double angle, map::Map &map) {
   double tg = tan(angle);
 
   auto gridIntersection = findFirstVerticalIntersection(camera_position, angle, tg);
 
-  while (isInside(gridIntersection, map)) {
-    if (isWall(gridIntersection, map)) {
+  while (map.isInside(gridIntersection)) {
+    if (map.isWall(gridIntersection)) {
       return gridIntersection;
     }
 
@@ -59,20 +59,6 @@ position::Position findVerticalWallIntersection(position::Position camera_positi
   }
 
   return {.x = HUGE_VAL, .y = HUGE_VAL};
-}
-
-bool isInside(position::Position position, map::Map map) {
-  double x = mapToMap(position.x), y = mapToMap(position.y);
-  return (x >= 0.0f && y >= 0.0f) && (x < map.getWidth() && y < map.getHeight());
-}
-
-bool isWall(position::Position position, map::Map map) {
-  double x = mapToMap(position.x), y = mapToMap(position.y);
-  return map.isWall(x, y);
-}
-
-int mapToMap(double x) {
-  return floor(x / map::kBlockSize);
 }
 
 double findDistance(position::Position intersection_position, position::Position camera_position) {
@@ -87,5 +73,4 @@ bool isLeft(double angle) {
 bool isUp(double angle) {
   return angle < k180_degree;
 }
-
 }
