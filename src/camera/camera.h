@@ -7,6 +7,7 @@
 #include <geometry.h>
 #include <map.h>
 #include <position.h>
+#include <color.h>
 
 #include <array>
 #include <iostream>
@@ -53,26 +54,14 @@ class Camera {
   void moveLeft();
   void rotateLeft();
   void rotateRight();
-  static void setColorLine(std::vector<unsigned char> &vector,
-                    int column,
-                    int bottom,
-                    int top,
-                    unsigned char r,
-                    unsigned char g,
-                    unsigned char b);
-  static void setColor(int column,
-                int row,
-                std::vector<unsigned char> &pixels,
-                unsigned char r,
-                unsigned char g,
-                unsigned char b);
-  double GetMin(double value_1, double value_2) const;
+  static void setColorLine(std::vector<unsigned char> &pixels, int column, int bottom, int top, color::ColorRGB color);
+  static void setColor(int column, int row, std::vector<unsigned char> &pixels, color::ColorRGB color);
   static void drawColumn(int column,
-                  double angle,
-                  int height,
-                  Camera *p_camera,
-                  std::vector<unsigned char> &pixels,
-                  map::Map &map);
+                         double angle,
+                         int height,
+                         Camera *p_camera,
+                         std::vector<unsigned char> &pixels,
+                         map::Map &map);
   static void drawFloor(int current_column,
                         double angle,
                         int columns_height,

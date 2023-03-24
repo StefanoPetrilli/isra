@@ -38,9 +38,7 @@ void Camera::drawColumn(int current_column,
                current_column,
                (int) floor((columns_height - height) / 2),
                (int) ((columns_height + height) / 2),
-               255,
-               0,
-               0);
+               color::kRed);
   drawFloor(current_column, angle, columns_height, height, camera, pixels);
 }
 
@@ -56,32 +54,21 @@ void Camera::drawFloor(int current_column,
     double straight_line_distance =
         kDistanceFromProjectionPlane_ * camera->getHeight() / (current_row - (columns_height / 2));
     double real_distance = straight_line_distance / cos(beta);
-    setColor(current_column, current_row, pixels, 0, 255, 0);
+    setColor(current_column, current_row, pixels, color::kGreen);
   }
 }
 
-void Camera::setColorLine(std::vector<unsigned char> &pixels,
-                          int column,
-                          int bottom,
-                          int top,
-                          unsigned char r,
-                          unsigned char g,
-                          unsigned char b) {
+void Camera::setColorLine(std::vector<unsigned char> &pixels, int column, int bottom, int top, color::ColorRGB color) {
   for (int i = top; i > bottom; --i) {
-    setColor(column, i, pixels, r, g, b);
+    setColor(column, i, pixels, color);
   }
 }
 
-void Camera::setColor(int column,
-                      int row,
-                      std::vector<unsigned char> &pixels,
-                      unsigned char r,
-                      unsigned char g,
-                      unsigned char b) {
+void Camera::setColor(int column, int row, std::vector<unsigned char> &pixels, color::ColorRGB color) {
   auto index = (column + (row * camera::kWindow_Width)) * 3;
-  pixels[index] = r;
-  pixels[index + 1] = g;
-  pixels[index + 2] = b;
+  pixels[index] = color.r;
+  pixels[index + 1] = color.g;
+  pixels[index + 2] = color.b;
 }
 
 void Camera::moveLeft() {
