@@ -21,6 +21,7 @@
 namespace camera {
 const static int kWindow_Width = 900;
 const static int kWindow_Height = 600;
+const static double kLight_Source_Constant = 2500;
 const static double kHeightConstant = map::kBlockSize * (camera::kWindow_Width / 2.0f) / 1.732050f;
 constexpr static const double kDistanceFromProjectionPlane_ =
     (camera::kWindow_Width / 2.0f) / 1.732050f; //TODO lockup table for tan(kFOV_*3.14159/180);
@@ -73,6 +74,14 @@ class Camera {
                           double height,
                           Camera *camera,
                           std::vector<unsigned char> &pixels);
+  static double getLightIntensity(double distance);
+  static void setColorLine(std::vector<unsigned char> &pixels,
+                           int column,
+                           int bottom,
+                           int top,
+                           color::ColorRGB color,
+                           double intensity);
+  static void setColor(int column, int row, std::vector<unsigned char> &pixels, color::ColorRGB color, double intensity);
 };
 
 }

@@ -7,6 +7,14 @@
 namespace color {
 typedef struct ColorRGB {
   unsigned char r, g, b;
+
+ ColorRGB operator*(const double x) const {
+   ColorRGB result{};
+   result.r = this->r * x;
+   result.g = this->g * x;
+   result.b = this->b * x;
+   return result;
+ }
 } ColorRGB;
 
 const static ColorRGB kRed {255, 0, 0};
