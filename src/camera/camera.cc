@@ -140,6 +140,7 @@ void Camera::rotateRight() {
 double Camera::getFacingDirectionInRadians() const {
   return view_direction_in_radians_;
 }
+
 Camera::Camera() {
   pixels_ = std::vector<unsigned char>(kWindow_Width * kWindow_Height * 3, 0);
   view_direction_in_radians_ = 1.5707963268f;
@@ -186,4 +187,7 @@ double Camera::getLightIntensity(double distance) {
   return std::min((kLight_Source_Constant / std::pow(distance, 2)), 1.0);
 }
 
+void Camera::LoadTexture(const char *path) {
+  textures_.emplace_back(path);
+}
 }

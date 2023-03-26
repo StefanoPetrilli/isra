@@ -8,8 +8,8 @@
 #include <map.h>
 #include <position.h>
 #include <color.h>
+#include <texture.h>
 
-#include <array>
 #include <iostream>
 #include <cmath>
 #include <vector>
@@ -32,6 +32,7 @@ class Camera {
   double height_;
   constexpr static const double kFOV_ = 1.0471975512;
   std::vector<unsigned char> pixels_;
+  std::vector<texture::Texture> textures_;
 
  public:
   Camera();
@@ -46,6 +47,7 @@ class Camera {
             camera::Camera *camera,
             std::vector<unsigned char> &pixels,
             map::Map &map);
+  void LoadTexture(const char *path);
 
  private:
   void moveForward();

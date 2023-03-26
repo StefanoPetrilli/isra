@@ -15,7 +15,7 @@ namespace texture {
 
 class Texture {
  public:
-  explicit Texture(char *file_name);
+  explicit Texture(const char *file_name);
   ~Texture() = default;
 
   std::vector<unsigned char> getData() { return data_; }

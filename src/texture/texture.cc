@@ -39,7 +39,7 @@ void texture::Texture::ReadPPMContent(std::ifstream &file) {
   }
 }
 
-texture::Texture::Texture(char *file_name) {
+texture::Texture::Texture(const char *file_name) {
   loadTexture(file_name);
 }
 
