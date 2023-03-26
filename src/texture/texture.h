@@ -7,9 +7,9 @@
 
 #include <iostream>
 #include <fstream>
+#include <vector>
 
 #include <color.h>
-#include <vector>
 
 namespace texture {
 

@@ -33,7 +33,7 @@ void texture::Texture::ReadPPMContent(std::ifstream &file) {
   int number;
   std::istringstream stream;
   while (std::getline(file, buffer)) {
-    stream = std::istringstream (buffer);
+    stream = std::istringstream(buffer);
     while (stream >> number)
       data_.push_back(number);
   }
@@ -82,6 +82,15 @@ void Texture::IsRightMaxValue(const std::string &max_value_string) {
 void Texture::IsReadSuccessfull(const std::string &value) {
   if (value.empty())
     throw std::invalid_argument("Failed to read file");
+}
+
+//TODO test this function
+color::ColorRGB Texture::getColor(int x, int y) const {
+  if (x >= 0 && x < width_ && y >= 0 && y < height_) {
+    int index = (y * width_ + x) * channels_;
+    return {.r = data_[index], .g = data_[index + 1], .b = data_[index + 2]};
+  }
+  throw std::invalid_argument("Wrong coordinates");
 }
 
 }

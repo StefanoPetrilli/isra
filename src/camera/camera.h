@@ -47,7 +47,8 @@ class Camera {
             camera::Camera *camera,
             std::vector<unsigned char> &pixels,
             map::Map &map);
-  void LoadTexture(const char *path);
+  void loadTexture(const char *path);
+  texture::Texture getTexture(int index);
 
  private:
   void moveForward();

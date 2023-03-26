@@ -187,7 +187,11 @@ double Camera::getLightIntensity(double distance) {
   return std::min((kLight_Source_Constant / std::pow(distance, 2)), 1.0);
 }
 
-void Camera::LoadTexture(const char *path) {
+void Camera::loadTexture(const char *path) {
   textures_.emplace_back(path);
+}
+
+texture::Texture Camera::getTexture(int index) {
+  return textures_[index];
 }
 }

@@ -2,7 +2,7 @@
 
 int main() {
   camera::Camera camera;
-  camera.LoadTexture("assets/wall.ppm");
+  camera.loadTexture("assets/wall.ppm");
   window::Window main_window(900, 600, "Isra", &camera);
   map::Map map = map::Map::getCoolMap();
 
