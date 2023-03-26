@@ -41,7 +41,7 @@ class Camera {
   position::Position getPosition();
   double getHeight() const;
   std::vector<unsigned char> &GetPixels();
-  void draw(int columns_number,
+  static void draw(int columns_number,
             int columns_height,
             camera::Camera *camera,
             std::vector<unsigned char> &pixels,

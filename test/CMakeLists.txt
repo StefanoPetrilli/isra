@@ -1,3 +1,5 @@
+add_subdirectory(assets)
+
 add_executable(isra_test
         main_test.cc)
 
@@ -7,7 +9,9 @@ target_link_libraries(isra_test
         position
         camera
         map
-        geometry)
+        geometry
+        texture
+        color)
 
 include(GoogleTest)
 gtest_discover_tests(isra_test)

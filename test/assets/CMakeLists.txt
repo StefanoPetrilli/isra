@@ -1,0 +1,4 @@
+configure_file(test_all_black.ppm test_all_black.ppm COPYONLY)
+configure_file(test_all_black_wrong_encoding.ppm test_all_black_wrong_encoding.ppm COPYONLY)
+configure_file(test_all_black_wrong_dimension.ppm test_all_black_wrong_dimension.ppm COPYONLY)
+configure_file(test_all_black_wrong_max_value.ppm test_all_black_wrong_max_value.ppm COPYONLY)

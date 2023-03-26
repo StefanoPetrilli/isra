@@ -4,6 +4,7 @@
 #include <gtest/gtest.h>
 #include <map.h>
 #include <geometry.h>
+#include <texture.h>
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
@@ -96,4 +97,43 @@ TEST(findFirstVerticalIntersection_Left, Expect_FirstVerticalIntersection_Left) 
 
   EXPECT_NEAR(expected.x, result.x, 1);
   EXPECT_NEAR(expected.y, result.y, 1);
+}
+
+TEST(Texture, Expect_Constructor_ToLoadTexture) {
+
+  char *image_path = "assets/test_all_black.ppm";
+  auto texture = texture::Texture(image_path);
+
+  auto result = texture.getData();
+  std::vector<unsigned char> expected(64 * 64 * 3, 0);
+
+  EXPECT_EQ(expected, result);
+}
+
+TEST(Texture, When_WrongFileName_Expect_Exception) {
+
+  char *image_path = "assets/test_all_black_no_file.ppm";
+
+  EXPECT_THROW(auto texture = texture::Texture(image_path), std::invalid_argument);
+}
+
+TEST(Texture, When_WrongEncoding_Expect_Exception) {
+
+  char *image_path = "assets/test_all_black_wrong_encoding.ppm";
+
+  EXPECT_THROW(auto texture = texture::Texture(image_path), std::invalid_argument);
+}
+
+TEST(Texture, When_WrongDimension_Expect_Exception) {
+
+  char *image_path = "assets/test_all_black_wrong_dimension.ppm";
+
+  EXPECT_THROW(auto texture = texture::Texture(image_path), std::invalid_argument);
+}
+
+TEST(Texture, When_WrongMaxValue_Expect_Exception) {
+
+  char *image_path = "assets/test_all_black_wrong_max_value.ppm";
+
+  EXPECT_THROW(auto texture = texture::Texture(image_path), std::invalid_argument);
 }
