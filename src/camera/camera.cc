@@ -32,15 +32,26 @@ void Camera::drawColumn(int current_column,
   double horizontal_distance = geometry::findDistance(horizontal_intersection, camera->getPosition());
   double vertical_distance = geometry::findDistance(vertical_intersection, camera->getPosition());
 
-  auto min_distance = std::min(horizontal_distance, vertical_distance);
+  auto min_distance = vertical_distance;
+  auto nearest_intersection = vertical_intersection.y;
+
+  if (horizontal_distance < vertical_distance) {
+    min_distance = horizontal_distance;
+    nearest_intersection = horizontal_intersection.x;
+  }
+
+  auto texture_column = static_cast<int>(nearest_intersection) % static_cast<int>(map::kBlockSize);
+
   double height = kHeightConstant / min_distance;
   double light_intensity = getLightIntensity(min_distance);
-  setColorLine(pixels,
-               current_column,
-               (int) floor((columns_height - height) / 2),
-               (int) ((columns_height + height) / 2),
-               color::kRed,
-               light_intensity);
+
+  setColorLineWithTexture(pixels,
+                          current_column,
+                          (int) floor((columns_height - height) / 2),
+                          (int) ((columns_height + height) / 2),
+                          camera->getTexture(0), //TODO chose hwo to select textures dinamically
+                          light_intensity,
+                          texture_column);
 
   double beta = std::abs(angle - camera->getFacingDirectionInRadians());
   drawFloor(current_column, beta, columns_height, height, camera, pixels);
@@ -57,7 +68,7 @@ void Camera::drawFloor(int current_column,
 
   for (int current_row = (int) ((columns_height - height) / 2); current_row > 0; --current_row) {
     straight_line_distance =
-        kDistanceFromProjectionPlane_ * camera->getHeight() / (current_row - (columns_height / 2));
+        kDistanceFromProjectionPlane_ * camera->getHeight() / (current_row - (static_cast<double>(columns_height) / 2));
     real_distance = straight_line_distance / cos(beta);
     light_intensity = getLightIntensity(real_distance);
     setColor(current_column, current_row, pixels, color::kGreen, light_intensity);
@@ -74,26 +85,27 @@ void Camera::drawCeiling(int current_column,
 
   for (int current_row = (int) ((columns_height + height) / 2); current_row < kWindow_Height; ++current_row) {
     straight_line_distance =
-        kDistanceFromProjectionPlane_ * camera->getHeight() / (current_row - (columns_height / 2));
+        kDistanceFromProjectionPlane_ * camera->getHeight() / (current_row - (static_cast<double>(columns_height) / 2));
     real_distance = straight_line_distance / cos(beta);
     light_intensity = getLightIntensity(real_distance);
     setColor(current_column, current_row, pixels, color::kBlue, light_intensity);
   }
 }
 
-void Camera::setColorLine(std::vector<unsigned char> &pixels, int column, int bottom, int top, color::ColorRGB color) {
-  for (int i = top; i > bottom; --i) {
-    setColor(column, i, pixels, color);
+void Camera::setColorLineWithTexture(std::vector<unsigned char> &pixels,
+                                     int column,
+                                     int bottom,
+                                     int top,
+                                     const texture::Texture &texture,
+                                     double intensity,
+                                     int texture_vertical_coordinate) {
+  for (int i = top, range_size = top - bottom; i > bottom; --i) {
+    setColor(column,
+             i,
+             pixels,
+             texture.getColor(texture_vertical_coordinate, MapToTileSize(i - bottom, range_size, map::kBlockSize))
+                 * intensity);
   }
-}
-
-void Camera::setColorLine(std::vector<unsigned char> &pixels,
-                          int column,
-                          int bottom,
-                          int top,
-                          color::ColorRGB color,
-                          double intensity) {
-  setColorLine(pixels, column, bottom, top, color * intensity);
 }
 
 void Camera::setColor(int column, int row, std::vector<unsigned char> &pixels, color::ColorRGB color) {
@@ -193,5 +205,9 @@ void Camera::loadTexture(const char *path) {
 
 texture::Texture Camera::getTexture(int index) {
   return textures_[index];
+}
+
+int MapToTileSize(double coordinate, double range_size, double tile_size) {
+  return static_cast<int>(coordinate / range_size * --tile_size);
 }
 }
