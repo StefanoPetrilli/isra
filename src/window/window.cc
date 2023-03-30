@@ -66,7 +66,7 @@ void Window::mainLoop(camera::Camera *camera, map::Map &map) {
               << camera->getFacingDirectionInRadians()
               << std::endl;
 
-    camera->draw(camera::kWindow_Width, camera::kWindow_Height, camera, map);
+    camera->draw(camera::kWindow_Width, camera::kWindow_Height, map);
 
     glTexSubImage2D(GL_TEXTURE_2D,
                     0,

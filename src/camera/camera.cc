@@ -6,22 +6,22 @@
 
 namespace camera {
 
-void Camera::draw(int columns_number, int columns_height, camera::Camera *camera, map::Map &map) {
+void Camera::draw(int columns_number, int columns_height, map::Map &map) {
   double ray_step = camera::Camera::getFOVInRadians() / columns_number;
-  double angle = camera->getFacingDirectionInRadians() - (camera::Camera::getFOVInRadians() / 2);
+  double angle = this->getFacingDirectionInRadians() - (camera::Camera::getFOVInRadians() / 2);
 
   for (int current_column = columns_number; current_column > 0; angle += ray_step, --current_column) {
-    drawColumn(current_column, angle, columns_height, camera, map);
+    drawColumn(current_column, angle, columns_height, map);
   }
 }
 
-void Camera::drawColumn(int current_column, double angle, int columns_height, Camera *camera, map::Map &map) {
+void Camera::drawColumn(int current_column, double angle, int columns_height, map::Map &map) {
   position::Position
-      horizontal_intersection = geometry::findHorizontalWallIntersection(camera->getPosition(), angle, map);
-  position::Position vertical_intersection = geometry::findVerticalWallIntersection(camera->getPosition(), angle, map);
+      horizontal_intersection = geometry::findHorizontalWallIntersection(this->getPosition(), angle, map);
+  position::Position vertical_intersection = geometry::findVerticalWallIntersection(this->getPosition(), angle, map);
 
-  double horizontal_distance = geometry::findDistance(horizontal_intersection, camera->getPosition());
-  double vertical_distance = geometry::findDistance(vertical_intersection, camera->getPosition());
+  double horizontal_distance = geometry::findDistance(horizontal_intersection, this->getPosition());
+  double vertical_distance = geometry::findDistance(vertical_intersection, this->getPosition());
 
   auto min_distance = vertical_distance;
   auto nearest_intersection = vertical_intersection.y;
@@ -40,33 +40,28 @@ void Camera::drawColumn(int current_column, double angle, int columns_height, Ca
       current_column,
       (int) floor((columns_height - height) / 2),
       (int) ((columns_height + height) / 2),
-      camera->getTexture(0), //TODO chose how to select textures dinamically
+      this->getTexture(0), //TODO chose how to select textures dinamically
       light_intensity,
       texture_column);
 
-  double beta = std::abs(angle - camera->getFacingDirectionInRadians());
-  drawFloor(current_column, beta, columns_height, height, camera, angle);
-  drawCeiling(current_column, beta, columns_height, height, camera);
+  double beta = std::abs(angle - this->getFacingDirectionInRadians());
+  drawFloor(current_column, beta, columns_height, height, angle);
+  drawCeiling(current_column, beta, columns_height, height);
 }
 
-void Camera::drawFloor(int current_column,
-                       double beta,
-                       int columns_height,
-                       double height,
-                       Camera *camera,
-                       double angle) {
+void Camera::drawFloor(int current_column, double beta, int columns_height, double height, double angle) {
   double straight_line_distance, real_distance, light_intensity;
 
   for (int current_row = (int) ((columns_height - height) / 2); current_row > 0; --current_row) {
     straight_line_distance =
-        kDistanceFromProjectionPlane_ * camera->getHeight() / (current_row - (static_cast<double>(columns_height) / 2));
+        kDistanceFromProjectionPlane_ * this->getHeight() / (current_row - (static_cast<double>(columns_height) / 2));
     real_distance = straight_line_distance / cos(beta);
     light_intensity = getLightIntensity(real_distance);
 
-    double yEnd = straight_line_distance * sin(angle) + camera->getPosition().y;
-    double xEnd = straight_line_distance * cos(angle) - camera->getPosition().x;
+    double yEnd = straight_line_distance * sin(angle) + this->getPosition().y;
+    double xEnd = straight_line_distance * cos(angle) - this->getPosition().x;
 
-    color::ColorRGB color = camera->getTexture(1).getColor(mod(xEnd, map::kBlockSize),
+    color::ColorRGB color = this->getTexture(1).getColor(mod(xEnd, map::kBlockSize),
                                                            mod(yEnd, map::kBlockSize));
 
     setColor(current_column, current_row, color, light_intensity);
@@ -81,12 +76,12 @@ int mod(double a, double b) {
   return static_cast<int>(result);
 }
 
-void Camera::drawCeiling(int current_column, double beta, int columns_height, double height, Camera *camera) {
+void Camera::drawCeiling(int current_column, double beta, int columns_height, double height) {
   double straight_line_distance, real_distance, light_intensity;
 
   for (int current_row = (int) ((columns_height + height) / 2); current_row < kWindow_Height; ++current_row) {
     straight_line_distance =
-        kDistanceFromProjectionPlane_ * camera->getHeight() / (current_row - (static_cast<double>(columns_height) / 2));
+        kDistanceFromProjectionPlane_ * this->getHeight() / (current_row - (static_cast<double>(columns_height) / 2));
     real_distance = straight_line_distance / cos(beta);
     light_intensity = getLightIntensity(real_distance);
     setColor(current_column, current_row, color::kBlue, light_intensity);

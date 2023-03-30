@@ -42,7 +42,7 @@ class Camera {
   position::Position getPosition();
   double getHeight() const;
   std::vector<unsigned char> &GetPixels();
-  void draw(int columns_number, int columns_height, camera::Camera *camera, map::Map &map);
+  void draw(int columns_number, int columns_height, map::Map &map);
   void loadTexture(const char *path);
   texture::Texture getTexture(int index);
 
@@ -54,14 +54,9 @@ class Camera {
   void rotateLeft();
   void rotateRight();
   void setColor(int column, int row, color::ColorRGB color);
-  void drawColumn(int column, double angle, int height, Camera *p_camera, map::Map &map);
-  void drawFloor(int current_column,
-                 double beta,
-                 int columns_height,
-                 double height,
-                 Camera *camera,
-                 double angle);
-  void drawCeiling(int current_column, double beta, int columns_height, double height, Camera *camera);
+  void drawColumn(int column, double angle, int height, map::Map &map);
+  void drawFloor(int current_column, double beta, int columns_height, double height, double angle);
+  void drawCeiling(int current_column, double beta, int columns_height, double height);
   double getLightIntensity(double distance);
   void setColor(int column, int row, color::ColorRGB color, double intensity);
   void setColorLine(int column,
