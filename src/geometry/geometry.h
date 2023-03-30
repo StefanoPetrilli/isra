@@ -12,6 +12,7 @@
 #include <cmath>
 
 namespace geometry {
+const double k30_degree = 0.5235987756f;
 const double k60_degree = 1.0471975512f;
 const double k90_degree = 1.5707963268f;
 const double k120_degree = 2.0943951024f;

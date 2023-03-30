@@ -69,7 +69,8 @@ class Camera {
                         int columns_height,
                         double height,
                         Camera *camera,
-                        std::vector<unsigned char> &pixels);
+                        std::vector<unsigned char> &pixels,
+                        double angle);
   static void drawCeiling(int current_column,
                           double beta,
                           int columns_height,
@@ -82,15 +83,23 @@ class Camera {
                        std::vector<unsigned char> &pixels,
                        color::ColorRGB color,
                        double intensity);
-  static void setColorLineWithTexture(std::vector<unsigned char> &pixels,
-                                      int column,
-                                      int bottom,
-                                      int top,
-                                      const texture::Texture &texture,
-                                      double intensity,
-                                      int texture_vertical_coordinate);
+  static void setColor(int column,
+                       int row,
+                       std::vector<unsigned char> &pixels,
+                       double intensity,
+                       const texture::Texture &texture,
+                       int texture_column,
+                       int texture_row);
+  static void setColorLine(std::vector<unsigned char> &pixels,
+                           int column,
+                           int bottom,
+                           int top,
+                           const texture::Texture &texture,
+                           double intensity,
+                           int texture_vertical_coordinate);
 };
 
 int MapToTileSize(double coordinate, double range_size, double tile_size);
+int mod(double a, double b);
 }
 #endif //ISRA_SRC_PLAYER_CAMERA_H_
