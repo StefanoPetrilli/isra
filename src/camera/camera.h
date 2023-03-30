@@ -30,7 +30,7 @@ class Camera {
   position::Position position_{};
   double view_direction_in_radians_;
   double height_;
-  constexpr static const double kFOV_ = 1.0471975512;
+  const double kFOV_ = geometry::k60_degree;
   std::vector<unsigned char> pixels_;
   std::vector<texture::Texture> textures_;
 
@@ -38,15 +38,11 @@ class Camera {
   Camera();
   void move(int key);
   double getFacingDirectionInRadians() const;
-  static double getFOVInRadians();
+  double getFOVInRadians();
   position::Position getPosition();
   double getHeight() const;
   std::vector<unsigned char> &GetPixels();
-  static void draw(int columns_number,
-                   int columns_height,
-                   camera::Camera *camera,
-                   std::vector<unsigned char> &pixels,
-                   map::Map &map);
+  void draw(int columns_number, int columns_height, camera::Camera *camera, map::Map &map);
   void loadTexture(const char *path);
   texture::Texture getTexture(int index);
 
@@ -57,46 +53,23 @@ class Camera {
   void moveLeft();
   void rotateLeft();
   void rotateRight();
-  static void setColor(int column, int row, std::vector<unsigned char> &pixels, color::ColorRGB color);
-  static void drawColumn(int column,
-                         double angle,
-                         int height,
-                         Camera *p_camera,
-                         std::vector<unsigned char> &pixels,
-                         map::Map &map);
-  static void drawFloor(int current_column,
-                        double beta,
-                        int columns_height,
-                        double height,
-                        Camera *camera,
-                        std::vector<unsigned char> &pixels,
-                        double angle);
-  static void drawCeiling(int current_column,
-                          double beta,
-                          int columns_height,
-                          double height,
-                          Camera *camera,
-                          std::vector<unsigned char> &pixels);
-  static double getLightIntensity(double distance);
-  static void setColor(int column,
-                       int row,
-                       std::vector<unsigned char> &pixels,
-                       color::ColorRGB color,
-                       double intensity);
-  static void setColor(int column,
-                       int row,
-                       std::vector<unsigned char> &pixels,
-                       double intensity,
-                       const texture::Texture &texture,
-                       int texture_column,
-                       int texture_row);
-  static void setColorLine(std::vector<unsigned char> &pixels,
-                           int column,
-                           int bottom,
-                           int top,
-                           const texture::Texture &texture,
-                           double intensity,
-                           int texture_vertical_coordinate);
+  void setColor(int column, int row, color::ColorRGB color);
+  void drawColumn(int column, double angle, int height, Camera *p_camera, map::Map &map);
+  void drawFloor(int current_column,
+                 double beta,
+                 int columns_height,
+                 double height,
+                 Camera *camera,
+                 double angle);
+  void drawCeiling(int current_column, double beta, int columns_height, double height, Camera *camera);
+  double getLightIntensity(double distance);
+  void setColor(int column, int row, color::ColorRGB color, double intensity);
+  void setColorLine(int column,
+                    int bottom,
+                    int top,
+                    const texture::Texture &texture,
+                    double intensity,
+                    int texture_vertical_coordinate);
 };
 
 int MapToTileSize(double coordinate, double range_size, double tile_size);
