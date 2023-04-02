@@ -120,16 +120,19 @@ void Camera::drawFloor(int current_column, double beta, int columns_height, doub
   }
 }
 
+//TODO draw image as ceiling
 void Camera::drawCeiling(int current_column, double beta, int columns_height, double height) {
-  double straight_line_distance, real_distance, light_intensity;
+  //double straight_line_distance, real_distance, light_intensity;
 
   for (int current_row = (int) ((columns_height + height) / 2.); current_row < getSceneHeight(); ++current_row) {
+    /*
     straight_line_distance =
         getDistanceFromProjectionPlane() * getCameraHeight()
             / (current_row - (static_cast<double>(columns_height) / 2.));
     real_distance = straight_line_distance / cos(beta);
     light_intensity = getLightIntensity(real_distance);
-    setColor(current_column, current_row, color::kBlue, light_intensity);
+    */
+     setColor(current_column, current_row, color::kBlack, 1.);
   }
 }
 

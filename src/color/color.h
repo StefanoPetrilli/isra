@@ -10,9 +10,9 @@ typedef struct ColorRGB {
 
  ColorRGB operator*(const double x) const {
    ColorRGB result{};
-   result.r = this->r * x;
-   result.g = this->g * x;
-   result.b = this->b * x;
+   result.r = r * x;
+   result.g = g * x;
+   result.b = b * x;
    return result;
  }
 } ColorRGB;
@@ -20,6 +20,7 @@ typedef struct ColorRGB {
 const static ColorRGB kRed {255, 0, 0};
 const static ColorRGB kGreen {0, 255, 0};
 const static ColorRGB kBlue {0, 0, 255};
+const static ColorRGB kBlack {0, 0, 0};
 
 }
 #endif //ISRA_SRC_COLOR_COLOR_H_
