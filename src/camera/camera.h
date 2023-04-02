@@ -15,32 +15,36 @@
 #include <vector>
 #include <GLFW/glfw3.h>
 
-#define MOVE_CONSTANT 1
-#define ROTATE_CONSTANT 0.01745329252f
-
 namespace camera {
-const static int kWindow_Width = 900;
-const static int kWindow_Height = 600;
-const static double kLight_Source_Constant = 2500;
-const static double kHeightConstant = map::kBlockSize * (camera::kWindow_Width / 2.0f) / 1.732050f;
-constexpr static const double kDistanceFromProjectionPlane_ =
-    (camera::kWindow_Width / 2.0f) / 1.732050f; //TODO lockup table for tan(kFOV_*3.14159/180);
-
 class Camera {
   position::Position position_{};
   double view_direction_in_radians_;
-  double height_;
+  double camera_height_;
+  int scene_height_;
+  int scene_width_;
   const double kFOV_ = geometry::k60_degree;
   std::vector<unsigned char> pixels_;
   std::vector<texture::Texture> textures_;
+  double height_constant_;
+  double distance_from_projection_plane_;
+  const double light_source_constant_ = 4000; //TODO
+  double rotation_step_ = geometry::k1_degree;
+  double move_step_ = 1.;
 
  public:
-  Camera();
+  Camera(int scene_width, int scene_height, double camera_height);
   void move(int key);
   double getFacingDirectionInRadians() const;
-  double getFOVInRadians();
+  double getFOVInRadians() const;
   position::Position getPosition();
-  double getHeight() const;
+  double getCameraHeight() const;
+  int getSceneWidth() const;
+  int getSceneHeight() const;
+  double getHeightConstant() const;
+  double getDistanceFromProjectionPlane() const;
+  double getLightSourceConstant() const;
+  double getRotationStep() const;
+  double getMoveStep() const;
   std::vector<unsigned char> &GetPixels();
   void draw(int columns_number, int columns_height, map::Map &map);
   void loadTexture(const char *path);
@@ -57,7 +61,7 @@ class Camera {
   void drawColumn(int column, double angle, int height, map::Map &map);
   void drawFloor(int current_column, double beta, int columns_height, double height, double angle);
   void drawCeiling(int current_column, double beta, int columns_height, double height);
-  double getLightIntensity(double distance);
+  double getLightIntensity(double distance) const;
   void setColor(int column, int row, color::ColorRGB color, double intensity);
   void setColorLine(int column,
                     int bottom,
@@ -68,6 +72,5 @@ class Camera {
 };
 
 int MapToTileSize(double coordinate, double range_size, double tile_size);
-int mod(double a, double b);
 }
 #endif //ISRA_SRC_PLAYER_CAMERA_H_

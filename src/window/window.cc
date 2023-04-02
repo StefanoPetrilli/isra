@@ -6,17 +6,15 @@
 #include "camera.h"
 
 namespace window {
-Window::Window(int width,
-               int height,
-               const std::string &window_name,
-               camera::Camera *camera) {
+Window::Window(const std::string &window_name, camera::Camera *camera) {
 
   glfwSetErrorCallback(error_callback);
 
   if (!glfwInit())
     exit(EXIT_FAILURE);
 
-  window_ = glfwCreateWindow(width, height, window_name.c_str(), nullptr, nullptr);
+  window_ = glfwCreateWindow(camera->getSceneWidth(),
+                             camera->getSceneHeight(), window_name.c_str(), nullptr, nullptr);
   if (!window_) {
     glfwTerminate();
     exit(EXIT_FAILURE);
@@ -36,8 +34,8 @@ Window::Window(int width,
   glTexImage2D(GL_TEXTURE_2D,
                0,
                GL_RGBA8,
-               camera::kWindow_Width,
-               camera::kWindow_Height,
+               camera->getSceneWidth(),
+               camera->getSceneHeight(),
                0,
                GL_RGB,
                GL_UNSIGNED_BYTE,
@@ -46,8 +44,8 @@ Window::Window(int width,
                   0,
                   0,
                   0,
-                  camera::kWindow_Width,
-                  camera::kWindow_Height,
+                  camera->getSceneWidth(),
+                  camera->getSceneHeight(),
                   GL_RGB,
                   GL_UNSIGNED_BYTE,
                   camera->GetPixels().data());
@@ -66,23 +64,23 @@ void Window::mainLoop(camera::Camera *camera, map::Map &map) {
               << camera->getFacingDirectionInRadians()
               << std::endl;
 
-    camera->draw(camera::kWindow_Width, camera::kWindow_Height, map);
+    camera->draw(camera->getSceneWidth(), camera->getSceneHeight(), map);
 
     glTexSubImage2D(GL_TEXTURE_2D,
                     0,
                     0,
                     0,
-                    camera::kWindow_Width,
-                    camera::kWindow_Height,
+                    camera->getSceneWidth(),
+                    camera->getSceneHeight(),
                     GL_RGB,
                     GL_UNSIGNED_BYTE,
                     camera->GetPixels().data());
 
     glBindFramebuffer(GL_READ_FRAMEBUFFER, readFboId_);
-    glBlitFramebuffer(0, 0, camera::kWindow_Width,
-                      camera::kWindow_Height,
-                      0, 0, camera::kWindow_Width,
-                      camera::kWindow_Height,
+    glBlitFramebuffer(0, 0, camera->getSceneWidth(),
+                      camera->getSceneHeight(),
+                      0, 0, camera->getSceneWidth(),
+                      camera->getSceneHeight(),
                       GL_COLOR_BUFFER_BIT, GL_LINEAR);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
     glfwSwapBuffers(window_);

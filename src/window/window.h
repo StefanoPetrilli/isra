@@ -24,10 +24,7 @@ class Window {
   static void key_callback(GLFWwindow *window, int key, [[maybe_unused]] int scancode, int action, int mods);
 
  public:
-  Window(int width,
-         int height,
-         const std::string &window_name,
-         camera::Camera *camera);
+  Window(const std::string &window_name, camera::Camera *camera);
   void mainLoop(camera::Camera *camera, map::Map &map);
 };
 }

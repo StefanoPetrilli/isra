@@ -73,4 +73,12 @@ bool isLeft(double angle) {
 bool isUp(double angle) {
   return angle < k180_degree;
 }
+
+int Mod(double a, double b) {
+  double result = std::fmod(a, b);
+  if (result < 0) {
+    result += b;
+  }
+  return static_cast<int>(result);
+}
 }
