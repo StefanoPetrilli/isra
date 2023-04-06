@@ -1,14 +1,14 @@
 #include "main.h"
 
 int main() {
-  camera::Camera camera(960, 600, 60.0);
+  camera::Camera camera(960, 600, 60.);
 
-  camera.loadTexture("assets/wall.ppm");
-  camera.loadTexture("assets/walkstone.ppm");
+  camera.LoadTexture("assets/wall.ppm");
+  camera.LoadTexture("assets/walkstone.ppm");
 
   window::Window main_window("Isra", &camera);
-  map::Map map = map::Map::getCoolMap();
+  map::Map map = map::Map::GetCoolMap();
 
-  main_window.mainLoop(&camera, map);
+  main_window.MainLoop(&camera, map);
   exit(EXIT_SUCCESS);
 }

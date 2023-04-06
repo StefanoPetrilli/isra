@@ -13,8 +13,8 @@ Window::Window(const std::string &window_name, camera::Camera *camera) {
   if (!glfwInit())
     exit(EXIT_FAILURE);
 
-  window_ = glfwCreateWindow(camera->getSceneWidth(),
-                             camera->getSceneHeight(), window_name.c_str(), nullptr, nullptr);
+  window_ = glfwCreateWindow(camera->GetSceneWidth(),
+                             camera->GetSceneHeight(), window_name.c_str(), nullptr, nullptr);
   if (!window_) {
     glfwTerminate();
     exit(EXIT_FAILURE);
@@ -34,8 +34,8 @@ Window::Window(const std::string &window_name, camera::Camera *camera) {
   glTexImage2D(GL_TEXTURE_2D,
                0,
                GL_RGBA8,
-               camera->getSceneWidth(),
-               camera->getSceneHeight(),
+               camera->GetSceneWidth(),
+               camera->GetSceneHeight(),
                0,
                GL_RGB,
                GL_UNSIGNED_BYTE,
@@ -44,8 +44,8 @@ Window::Window(const std::string &window_name, camera::Camera *camera) {
                   0,
                   0,
                   0,
-                  camera->getSceneWidth(),
-                  camera->getSceneHeight(),
+                  camera->GetSceneWidth(),
+                  camera->GetSceneHeight(),
                   GL_RGB,
                   GL_UNSIGNED_BYTE,
                   camera->GetPixels().data());
@@ -58,29 +58,29 @@ Window::Window(const std::string &window_name, camera::Camera *camera) {
 
 }
 
-void Window::mainLoop(camera::Camera *camera, map::Map &map) {
+void Window::MainLoop(camera::Camera *camera, map::Map &map) {
   while (!glfwWindowShouldClose(window_)) {
-    std::cout << camera->getPosition().x << "; " << camera->getPosition().y << " - "
-              << camera->getFacingDirectionInRadians()
+    std::cout << camera->GetPosition().x << "; " << camera->GetPosition().y << " - "
+              << camera->GetFacingDirectionInRadians()
               << std::endl;
 
-    camera->draw(camera->getSceneWidth(), camera->getSceneHeight(), map);
+    camera->Draw(camera->GetSceneWidth(), camera->GetSceneHeight(), map);
 
     glTexSubImage2D(GL_TEXTURE_2D,
                     0,
                     0,
                     0,
-                    camera->getSceneWidth(),
-                    camera->getSceneHeight(),
+                    camera->GetSceneWidth(),
+                    camera->GetSceneHeight(),
                     GL_RGB,
                     GL_UNSIGNED_BYTE,
                     camera->GetPixels().data());
 
     glBindFramebuffer(GL_READ_FRAMEBUFFER, readFboId_);
-    glBlitFramebuffer(0, 0, camera->getSceneWidth(),
-                      camera->getSceneHeight(),
-                      0, 0, camera->getSceneWidth(),
-                      camera->getSceneHeight(),
+    glBlitFramebuffer(0, 0, camera->GetSceneWidth(),
+                      camera->GetSceneHeight(),
+                      0, 0, camera->GetSceneWidth(),
+                      camera->GetSceneHeight(),
                       GL_COLOR_BUFFER_BIT, GL_LINEAR);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
     glfwSwapBuffers(window_);
@@ -102,6 +102,6 @@ void Window::key_callback(GLFWwindow *window,
                           [[maybe_unused]] int action,
                           [[maybe_unused]] int mods) {
   key == GLFW_KEY_ESCAPE ? glfwSetWindowShouldClose(window, GLFW_TRUE) : ((camera::Camera *) glfwGetWindowUserPointer(
-      window))->move(key);
+      window))->Move(key);
 }
 }

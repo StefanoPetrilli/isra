@@ -6,15 +6,15 @@
 
 namespace map {
 
-std::size_t Map::getWidth() {
+std::size_t Map::GetWidth() {
   return map_.at(0).size();
 }
 
-std::size_t Map::getHeight() {
+std::size_t Map::GetHeight() {
   return map_.size();
 }
 
-bool Map::isWall(int x, int y) {
+bool Map::IsWall(int x, int y) {
   return map_.at(y).at(x);
 }
 
@@ -22,25 +22,25 @@ Map::Map(tMap map) {
   map_ = std::move(map);
 }
 
-int Map::mapToMap(double x) {
+int Map::MapToMap(double x) {
   return floor(x / map::kBlockSize);
 }
 
-bool Map::isWall(position::Position position) {
-  double x = this->mapToMap(position.x), y = this->mapToMap(position.y);
-  return this->isWall(x, y);
+bool Map::IsWall(position::Position position) {
+  double x = this->MapToMap(position.x), y = this->MapToMap(position.y);
+  return this->IsWall(x, y);
 }
 
-bool Map::isInside(position::Position position) {
-  double x = this->mapToMap(position.x), y = this->mapToMap(position.y);
-  return (x >= 0.0f && y >= 0.0f) && (x < this->getWidth() && y < this->getHeight());
+bool Map::IsInside(position::Position position) {
+  double x = this->MapToMap(position.x), y = this->MapToMap(position.y);
+  return (x >= 0.0f && y >= 0.0f) && (x < this->GetWidth() && y < this->GetHeight());
 }
 
-Map Map::getCoolMap() {
+Map Map::GetCoolMap() {
   return Map(kCoolMap);
 }
 
-Map Map::getBasicMap() {
+Map Map::GetBasicMap() {
   return Map(kBasicMap);
 }
 

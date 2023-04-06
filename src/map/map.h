@@ -36,20 +36,18 @@ const static tMap kBasicMap = {{1, 1, 1, 1},
 
 class Map {
 
+  explicit Map(tMap map);
   tMap map_{};
 
  public:
-  static Map getCoolMap();
-  static Map getBasicMap();
-  std::size_t getWidth();
-  std::size_t getHeight();
-  bool isWall(int x, int y);
-  static int mapToMap(double x);
-  bool isInside(position::Position position);
-  bool isWall(position::Position position);
-
- private:
-  explicit Map(tMap map);
+  static Map GetCoolMap();
+  static Map GetBasicMap();
+  std::size_t GetWidth();
+  std::size_t GetHeight();
+  bool IsWall(int x, int y);
+  static int MapToMap(double x);
+  bool IsInside(position::Position position);
+  bool IsWall(position::Position position);
 };
 }
 #endif //ISRA_SRC_MAP_MAP_H_

@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
 
 TEST(findHorizontalWallIntersection_Forward, Expect_FirstHoriontalWallIntersection_Forward) {
 
-  map::Map map = map::Map::getBasicMap();
+  map::Map map = map::Map::GetBasicMap();
 
   position::Position expected = {187, 63};
   auto result = geometry::findHorizontalWallIntersection({96, 224}, geometry::k60_degree, map);
@@ -25,7 +25,7 @@ TEST(findHorizontalWallIntersection_Forward, Expect_FirstHoriontalWallIntersecti
 
 TEST(findFirstHorizontalIntersection_Forward, Expect_FirstHorizontalIntersection_Forward) {
 
-  map::Map map = map::Map::getBasicMap();
+  map::Map map = map::Map::GetBasicMap();
 
   position::Position expected = {115, 191};
   auto result = geometry::findFirstHorizontalIntersection({96, 224}, geometry::k60_degree, tan(geometry::k60_degree));
@@ -36,7 +36,7 @@ TEST(findFirstHorizontalIntersection_Forward, Expect_FirstHorizontalIntersection
 
 TEST(findHorizontalWallIntersection_Back, Expect_FirstHoriontalWallIntersection_Back) {
 
-  map::Map map = map::Map::getBasicMap();
+  map::Map map = map::Map::GetBasicMap();
 
   position::Position expected = {151, 320};
   auto result = geometry::findHorizontalWallIntersection({96, 224}, geometry::k300_degree, map);
@@ -47,7 +47,7 @@ TEST(findHorizontalWallIntersection_Back, Expect_FirstHoriontalWallIntersection_
 
 TEST(findFirstHorizontalIntersection_Back, Expect_FirstHorizontalIntersection_Back) {
 
-  map::Map map = map::Map::getBasicMap();
+  map::Map map = map::Map::GetBasicMap();
 
   position::Position expected = {115, 256};
   auto result = geometry::findFirstHorizontalIntersection({96, 224}, geometry::k300_degree, tan(geometry::k300_degree));
@@ -58,7 +58,7 @@ TEST(findFirstHorizontalIntersection_Back, Expect_FirstHorizontalIntersection_Ba
 
 TEST(findVerticalWallIntersection_Right, Expect_FirstVerticalWallIntersection_Right) {
 
-  map::Map map = map::Map::getBasicMap();
+  map::Map map = map::Map::GetBasicMap();
 
   position::Position expected = {192, 57.92f};
   auto result = geometry::findVerticalWallIntersection({96, 224}, geometry::k60_degree, map);
@@ -69,7 +69,7 @@ TEST(findVerticalWallIntersection_Right, Expect_FirstVerticalWallIntersection_Ri
 
 TEST(findFirstVerticalIntersection_Right, Expect_FirstVerticalIntersection_Right) {
 
-  map::Map map = map::Map::getBasicMap();
+  map::Map map = map::Map::GetBasicMap();
 
   position::Position expected = {128, 168.64};
   auto result = geometry::findFirstVerticalIntersection({96, 224}, geometry::k60_degree, tan(geometry::k60_degree));
@@ -80,7 +80,7 @@ TEST(findFirstVerticalIntersection_Right, Expect_FirstVerticalIntersection_Right
 
 TEST(findVerticalWallIntersection_Left, Expect_FirstVerticalWallIntersection_Left) {
 
-  map::Map map = map::Map::getBasicMap();
+  map::Map map = map::Map::GetBasicMap();
 
   position::Position expected = {64, 58};
   auto result = geometry::findVerticalWallIntersection({160, 224}, geometry::k120_degree, map);
@@ -91,7 +91,7 @@ TEST(findVerticalWallIntersection_Left, Expect_FirstVerticalWallIntersection_Lef
 
 TEST(findFirstVerticalIntersection_Left, Expect_FirstVerticalIntersection_Left) {
 
-  map::Map map = map::Map::getBasicMap();
+  map::Map map = map::Map::GetBasicMap();
 
   position::Position expected = {64, 166};
   auto result = geometry::findFirstVerticalIntersection({96, 224}, geometry::k120_degree, tan(geometry::k120_degree));
@@ -105,7 +105,7 @@ TEST(Texture, Expect_Constructor_ToLoadTexture) {
   char *image_path = "assets/test_all_black.ppm";
   auto texture = texture::Texture(image_path);
 
-  auto result = texture.getData();
+  auto result = texture.GetData();
   std::vector<unsigned char> expected(64 * 64 * 3, 0);
 
   EXPECT_EQ(expected, result);

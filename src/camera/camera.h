@@ -30,45 +30,43 @@ class Camera {
   const double light_source_constant_ = 4000; //TODO
   double rotation_step_ = geometry::k1_degree;
   double move_step_ = 1.;
-
- public:
-  Camera(int scene_width, int scene_height, double camera_height);
-  void move(int key);
-  double getFacingDirectionInRadians() const;
-  double getFOVInRadians() const;
-  position::Position getPosition();
-  double getCameraHeight() const;
-  int getSceneWidth() const;
-  int getSceneHeight() const;
-  double getHeightConstant() const;
-  double getDistanceFromProjectionPlane() const;
-  double getLightSourceConstant() const;
-  double getRotationStep() const;
-  double getMoveStep() const;
-  std::vector<unsigned char> &GetPixels();
-  void draw(int columns_number, int columns_height, map::Map &map);
-  void loadTexture(const char *path);
-  texture::Texture getTexture(int index);
-
- private:
-  void moveForward();
-  void moveBackward();
-  void moveRight();
-  void moveLeft();
-  void rotateLeft();
-  void rotateRight();
-  void setColor(int column, int row, color::ColorRGB color);
-  void drawColumn(int column, double angle, int height, map::Map &map);
-  void drawFloor(int current_column, double beta, int columns_height, double height, double angle);
-  void drawCeiling(int current_column, double beta, int columns_height, double height);
-  double getLightIntensity(double distance) const;
-  void setColor(int column, int row, color::ColorRGB color, double intensity);
-  void setColorLine(int column,
+  void MoveForward();
+  void MoveBackward();
+  void MoveRight();
+  void MoveLeft();
+  void RotateLeft();
+  void RotateRight();
+  void SetColor(int column, int row, color::ColorRGB color);
+  void DrawColumn(int column, double angle, int columns_height, map::Map &map);
+  void DrawFloor(int current_column, double beta, int columns_height, double height, double angle);
+  void DrawCeiling(int current_column, int columns_height, double height);
+  double GetLightIntensity(double distance) const;
+  void SetColor(int column, int row, color::ColorRGB color, double intensity);
+  void SetColorLine(int column,
                     int bottom,
                     int top,
                     const texture::Texture &texture,
                     double intensity,
                     int texture_vertical_coordinate);
+
+ public:
+  Camera(int scene_width, int scene_height, double camera_height);
+  void Move(int key);
+  double GetFacingDirectionInRadians() const;
+  double GetFovInRadians() const;
+  position::Position GetPosition();
+  double GetCameraHeight() const;
+  int GetSceneWidth() const;
+  int GetSceneHeight() const;
+  double GetHeightConstant() const;
+  double GetDistanceFromProjectionPlane() const;
+  double GetLightSourceConstant() const;
+  double GetRotationStep() const;
+  double GetMoveStep() const;
+  std::vector<unsigned char> &GetPixels();
+  void Draw(int columns_number, int columns_height, map::Map &map);
+  void LoadTexture(const char *path);
+  texture::Texture GetTexture(int index);
 };
 
 int MapToTileSize(double coordinate, double range_size, double tile_size);

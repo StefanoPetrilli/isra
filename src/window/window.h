@@ -17,7 +17,6 @@
 namespace window {
 class Window {
 
- private:
   GLFWwindow *window_;
   GLuint readFboId_ = 0;
   static void error_callback(int error, const char *description);
@@ -25,7 +24,7 @@ class Window {
 
  public:
   Window(const std::string &window_name, camera::Camera *camera);
-  void mainLoop(camera::Camera *camera, map::Map &map);
+  void MainLoop(camera::Camera *camera, map::Map &map);
 };
 }
 

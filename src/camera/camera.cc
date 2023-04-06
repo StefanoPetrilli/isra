@@ -13,66 +13,66 @@ Camera::Camera(int scene_width, int scene_height, double camera_height) {
   camera_height_ = camera_height;
   scene_height_ = scene_height;
   scene_width_ = scene_width;
-  height_constant_ = map::kBlockSize * (static_cast<double>(this->getSceneHeight()) / 2.) / 1.732050;
+  height_constant_ = map::kBlockSize * (static_cast<double>(this->GetSceneHeight()) / 2.) / 1.732050;
   distance_from_projection_plane_ =
-      (static_cast<double>(this->getSceneWidth()) / 2.)
+      (static_cast<double>(this->GetSceneWidth()) / 2.)
           / std::tan(geometry::k60_degree); //TODO lockup table for tan;
-  pixels_ = std::vector<unsigned char>(this->getSceneWidth() * this->getSceneHeight() * 3, 0);
+  pixels_ = std::vector<unsigned char>(this->GetSceneWidth() * this->GetSceneHeight() * 3, 0);
 }
 
-double Camera::getFOVInRadians() const {
+double Camera::GetFovInRadians() const {
   return kFOV_;
 }
 
-position::Position Camera::getPosition() {
+position::Position Camera::GetPosition() {
   return position_;
 }
 
-double Camera::getCameraHeight() const {
+double Camera::GetCameraHeight() const {
   return camera_height_;
 }
 
-int Camera::getSceneWidth() const {
+int Camera::GetSceneWidth() const {
   return scene_width_;
 }
 
-int Camera::getSceneHeight() const {
+int Camera::GetSceneHeight() const {
   return scene_height_;
 }
 
-double Camera::getHeightConstant() const {
+double Camera::GetHeightConstant() const {
   return height_constant_;
 }
 
-double Camera::getDistanceFromProjectionPlane() const {
+double Camera::GetDistanceFromProjectionPlane() const {
   return distance_from_projection_plane_;
 }
 
-double Camera::getLightSourceConstant() const {
+double Camera::GetLightSourceConstant() const {
   return light_source_constant_;
 }
 
-double Camera::getMoveStep() const {
+double Camera::GetMoveStep() const {
   return move_step_;
 }
 
-void Camera::draw(int columns_number, int columns_height, map::Map &map) {
-  double ray_step = camera::Camera::getFOVInRadians() / columns_number;
-  double angle = getFacingDirectionInRadians() - (camera::Camera::getFOVInRadians() / 2);
+void Camera::Draw(int columns_number, int columns_height, map::Map &map) {
+  double ray_step = camera::Camera::GetFovInRadians() / columns_number;
+  double angle = GetFacingDirectionInRadians() - (camera::Camera::GetFovInRadians() / 2);
 
   for (int current_column = columns_number; current_column > 0; --current_column) {
     angle += ray_step;
-    drawColumn(current_column, angle, columns_height, map);
+    DrawColumn(current_column, angle, columns_height, map);
   }
 }
 
-void Camera::drawColumn(int current_column, double angle, int columns_height, map::Map &map) {
+void Camera::DrawColumn(int column, double angle, int columns_height, map::Map &map) {
   position::Position
-      horizontal_intersection = geometry::findHorizontalWallIntersection(getPosition(), angle, map);
-  position::Position vertical_intersection = geometry::findVerticalWallIntersection(getPosition(), angle, map);
+      horizontal_intersection = geometry::findHorizontalWallIntersection(GetPosition(), angle, map);
+  position::Position vertical_intersection = geometry::findVerticalWallIntersection(GetPosition(), angle, map);
 
-  double horizontal_distance = geometry::findDistance(horizontal_intersection, getPosition());
-  double vertical_distance = geometry::findDistance(vertical_intersection, getPosition());
+  double horizontal_distance = geometry::findDistance(horizontal_intersection, GetPosition());
+  double vertical_distance = geometry::findDistance(vertical_intersection, GetPosition());
 
   auto min_distance = vertical_distance;
   auto nearest_intersection = vertical_intersection.y;
@@ -84,126 +84,116 @@ void Camera::drawColumn(int current_column, double angle, int columns_height, ma
 
   auto texture_column = static_cast<int>(nearest_intersection) % static_cast<int>(map::kBlockSize);
 
-  double height = getHeightConstant() / min_distance;
-  double light_intensity = getLightIntensity(min_distance);
+  double height = GetHeightConstant() / min_distance;
+  double light_intensity = GetLightIntensity(min_distance);
 
-  setColorLine(
-      current_column,
+  SetColorLine(
+      column,
       (int) floor((columns_height - height) / 2),
       (int) ((columns_height + height) / 2),
-      getTexture(0), //TODO chose how to select textures dinamically
+      GetTexture(0), //TODO chose how to select textures dinamically
       light_intensity,
       texture_column);
 
-  double beta = std::abs(angle - getFacingDirectionInRadians());
-  drawFloor(current_column, beta, columns_height, height, angle);
-  drawCeiling(current_column, beta, columns_height, height);
+  double beta = std::abs(angle - GetFacingDirectionInRadians());
+  DrawFloor(column, beta, columns_height, height, angle);
+  DrawCeiling(column, columns_height, height);
 }
 
-void Camera::drawFloor(int current_column, double beta, int columns_height, double height, double angle) {
+void Camera::DrawFloor(int current_column, double beta, int columns_height, double height, double angle) {
   double straight_line_distance, real_distance, light_intensity;
 
   for (int current_row = (int) ((columns_height - height) / 2); current_row > 0; --current_row) {
     straight_line_distance =
-        getDistanceFromProjectionPlane() * getCameraHeight()
+        GetDistanceFromProjectionPlane() * GetCameraHeight()
             / (current_row - (static_cast<double>(columns_height) / 2.)); // TODO extract this function
     real_distance = straight_line_distance / cos(beta);
-    light_intensity = getLightIntensity(real_distance);
+    light_intensity = GetLightIntensity(real_distance);
 
-    double yEnd = straight_line_distance * sin(angle) + getPosition().y;
-    double xEnd = straight_line_distance * cos(angle) - getPosition().x;
+    double yEnd = straight_line_distance * sin(angle) + GetPosition().y;
+    double xEnd = straight_line_distance * cos(angle) - GetPosition().x;
 
-    color::ColorRGB color = getTexture(1).getColor(geometry::Mod(xEnd, map::kBlockSize),
+    color::ColorRGB color = GetTexture(1).getColor(geometry::Mod(xEnd, map::kBlockSize),
                                                    geometry::Mod(yEnd, map::kBlockSize));
 
-    setColor(current_column, current_row, color, light_intensity);
+    SetColor(current_column, current_row, color, light_intensity);
   }
 }
 
-//TODO draw image as ceiling
-void Camera::drawCeiling(int current_column, double beta, int columns_height, double height) {
-  //double straight_line_distance, real_distance, light_intensity;
-
-  for (int current_row = (int) ((columns_height + height) / 2.); current_row < getSceneHeight(); ++current_row) {
-    /*
-    straight_line_distance =
-        getDistanceFromProjectionPlane() * getCameraHeight()
-            / (current_row - (static_cast<double>(columns_height) / 2.));
-    real_distance = straight_line_distance / cos(beta);
-    light_intensity = getLightIntensity(real_distance);
-    */
-     setColor(current_column, current_row, color::kBlack, 1.);
+void Camera::DrawCeiling(int current_column, int columns_height, double height) {
+  for (int current_row = (int) ((columns_height + height) / 2.); current_row < GetSceneHeight(); ++current_row) {
+    SetColor(current_column, current_row, color::kBlack, 1.);
   }
 }
 
-void Camera::setColorLine(int column,
+void Camera::SetColorLine(int column,
                           int bottom,
                           int top,
                           const texture::Texture &texture,
                           double intensity,
                           int texture_vertical_coordinate) {
   for (int i = top, range_size = top - bottom; i > bottom; --i) {
-    setColor(column,
+    SetColor(column,
              i,
              texture.getColor(texture_vertical_coordinate, MapToTileSize(i - bottom, range_size, map::kBlockSize))
                  * intensity);
   }
 }
 
-void Camera::setColor(int column, int row, color::ColorRGB color) {
-  auto index = (column + (row * getSceneWidth())) * 3;
+void Camera::SetColor(int column, int row, color::ColorRGB color) {
+  auto index = (column + (row * GetSceneWidth())) * 3;
   pixels_[index] = color.r;
   pixels_[index + 1] = color.g;
   pixels_[index + 2] = color.b;
 }
 
-void Camera::setColor(int column, int row, color::ColorRGB color, double intensity) {
-  setColor(column, row, color * intensity);
+void Camera::SetColor(int column, int row, color::ColorRGB color, double intensity) {
+  SetColor(column, row, color * intensity);
 }
 
-void Camera::moveLeft() {
-  position_.x -= getMoveStep();
+void Camera::MoveLeft() {
+  position_.x -= GetMoveStep();
 }
 
-void Camera::moveRight() {
-  position_.x += getMoveStep();
+void Camera::MoveRight() {
+  position_.x += GetMoveStep();
 }
 
-void Camera::moveBackward() {
-  position_.y += getMoveStep();
+void Camera::MoveBackward() {
+  position_.y += GetMoveStep();
 }
 
-void Camera::moveForward() {
-  position_.y -= getMoveStep();
+void Camera::MoveForward() {
+  position_.y -= GetMoveStep();
 }
 
-void Camera::rotateLeft() {
-  view_direction_in_radians_ += getRotationStep();
+void Camera::RotateLeft() {
+  view_direction_in_radians_ += GetRotationStep();
   if (view_direction_in_radians_ > geometry::k359_degree) view_direction_in_radians_ = geometry::k1_degree;
 }
 
-void Camera::rotateRight() {
-  view_direction_in_radians_ -= getRotationStep();
+void Camera::RotateRight() {
+  view_direction_in_radians_ -= GetRotationStep();
   if (view_direction_in_radians_ < geometry::k1_degree) view_direction_in_radians_ = geometry::k359_degree;
 }
 
-double Camera::getFacingDirectionInRadians() const {
+double Camera::GetFacingDirectionInRadians() const {
   return view_direction_in_radians_;
 }
 
-void Camera::move(int key) {
+void Camera::Move(int key) {
   switch (key) {
-    case (GLFW_KEY_Q): rotateLeft();
+    case (GLFW_KEY_Q): RotateLeft();
       break;
-    case (GLFW_KEY_W): moveForward();
+    case (GLFW_KEY_W): MoveForward();
       break;
-    case (GLFW_KEY_E): rotateRight();
+    case (GLFW_KEY_E): RotateRight();
       break;
-    case (GLFW_KEY_A): moveLeft();
+    case (GLFW_KEY_A): MoveLeft();
       break;
-    case (GLFW_KEY_S): moveBackward();
+    case (GLFW_KEY_S): MoveBackward();
       break;
-    case (GLFW_KEY_D): moveRight();
+    case (GLFW_KEY_D): MoveRight();
       break;
     default:break;
   }
@@ -213,18 +203,18 @@ std::vector<unsigned char> &Camera::GetPixels() {
   return pixels_;
 }
 
-double Camera::getLightIntensity(double distance) const {
-  return std::min((getLightSourceConstant() / std::pow(distance, 2)), 1.);
+double Camera::GetLightIntensity(double distance) const {
+  return std::min((GetLightSourceConstant() / std::pow(distance, 2)), 1.);
 }
 
-void Camera::loadTexture(const char *path) {
+void Camera::LoadTexture(const char *path) {
   textures_.emplace_back(path);
 }
 
-texture::Texture Camera::getTexture(int index) {
+texture::Texture Camera::GetTexture(int index) {
   return textures_[index];
 }
-double Camera::getRotationStep() const {
+double Camera::GetRotationStep() const {
   return rotation_step_;
 }
 

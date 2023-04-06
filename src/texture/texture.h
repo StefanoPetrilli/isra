@@ -14,19 +14,7 @@
 namespace texture {
 
 class Texture {
- public:
-  explicit Texture(const char *file_name);
-  ~Texture() = default;
-
-  std::vector<unsigned char> getData() { return data_; }
-  int width() const;
-  int height() const;
-  int channels() const;
-  int size() const;
-  color::ColorRGB getColor(int x, int y) const;
-
- private:
-  void loadTexture(const char *file_name);
+  void LoadTexture(const char *file_name);
   static void IsRightEncoding(const std::string &encoding);
   static void IsValidFile(const std::ifstream &file);
   static void IsRightDimension(const std::string &dimensions_string);
@@ -38,6 +26,16 @@ class Texture {
   int height_ = 64;
   int channels_ = 3;
   int size_ = width_ * height_ * channels_;
+
+ public:
+  explicit Texture(const char *file_name);
+  ~Texture() = default;
+  int GetWidth() const;
+  int GetHeight() const;
+  int GetChannels() const;
+  int GetSize() const;
+  unsigned char GetData(size_t index) const;
+  color::ColorRGB getColor(int x, int y) const;
 };
 
 }

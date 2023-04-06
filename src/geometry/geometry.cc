@@ -22,8 +22,8 @@ position::Position findHorizontalWallIntersection(position::Position camera_posi
 
   auto gridIntersection = findFirstHorizontalIntersection(camera_position, angle, tg);
 
-  while (map.isInside(gridIntersection)) {
-    if (map.isWall(gridIntersection)) {
+  while (map.IsInside(gridIntersection)) {
+    if (map.IsWall(gridIntersection)) {
       return gridIntersection;
     }
 
@@ -49,8 +49,8 @@ position::Position findVerticalWallIntersection(position::Position camera_positi
 
   auto gridIntersection = findFirstVerticalIntersection(camera_position, angle, tg);
 
-  while (map.isInside(gridIntersection)) {
-    if (map.isWall(gridIntersection)) {
+  while (map.IsInside(gridIntersection)) {
+    if (map.IsWall(gridIntersection)) {
       return gridIntersection;
     }
 

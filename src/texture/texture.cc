@@ -9,7 +9,7 @@
 
 namespace texture {
 
-void texture::Texture::loadTexture(const char *file_name) {
+void texture::Texture::LoadTexture(const char *file_name) {
 
   std::ifstream file(file_name, std::ios::binary);
   IsValidFile(file);
@@ -40,23 +40,27 @@ void texture::Texture::ReadPPMContent(std::ifstream &file) {
 }
 
 texture::Texture::Texture(const char *file_name) {
-  loadTexture(file_name);
+  LoadTexture(file_name);
 }
 
-int texture::Texture::size() const {
+int texture::Texture::GetSize() const {
   { return size_; }
 }
 
-int texture::Texture::channels() const {
+int texture::Texture::GetChannels() const {
   { return channels_; }
 }
 
-int Texture::width() const {
+int Texture::GetWidth() const {
   return width_;
 }
 
-int Texture::height() const {
+int Texture::GetHeight() const {
   return height_;
+}
+
+unsigned char Texture::GetData(size_t index) const {
+  return data_.at(index);
 }
 
 void Texture::IsRightEncoding(const std::string &encoding) {
@@ -86,11 +90,10 @@ void Texture::IsReadSuccessfull(const std::string &value) {
 
 //TODO test this function
 color::ColorRGB Texture::getColor(int x, int y) const {
-  if (x >= 0 && x < width_ && y >= 0 && y < height_) {
-    int index = (y * width_ + x) * channels_;
-    return {.r = data_[index], .g = data_[index + 1], .b = data_[index + 2]};
+  if (x >= 0 && x < GetWidth() && y >= 0 && y < GetHeight()) {
+    int index = (y * GetWidth() + x) * GetChannels();
+    return {.r = GetData(index), .g = GetData(index + 1), .b = GetData(index + 2)};
   }
   throw std::invalid_argument("Wrong coordinates");
 }
-
 }
