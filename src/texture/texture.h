@@ -34,6 +34,7 @@ class Texture {
   int GetHeight() const;
   int GetChannels() const;
   int GetSize() const;
+  std::vector<unsigned char> GetData() const;
   unsigned char GetData(size_t index) const;
   color::ColorRGB getColor(int x, int y) const;
 };

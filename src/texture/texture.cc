@@ -59,6 +59,10 @@ int Texture::GetHeight() const {
   return height_;
 }
 
+std::vector<unsigned char> Texture::GetData() const {
+  return data_;
+}
+
 unsigned char Texture::GetData(size_t index) const {
   return data_.at(index);
 }
