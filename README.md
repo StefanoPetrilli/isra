@@ -1,8 +1,8 @@
 # Isra
 
-Foobar is ray casting render demo in C++ and OpenGL.
+Isra is a ray casting render demo in C++ and OpenGL.
 
-
+![ezgif-5-90fe3b27bc](https://user-images.githubusercontent.com/8702339/230738249-832a193b-a078-4c37-9114-28351655d329.gif)
 
 ## Local setup - Linux
 
