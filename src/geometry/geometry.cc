@@ -9,7 +9,7 @@ namespace geometry {
 position::Position findFirstHorizontalIntersection(position::Position camera_position, double angle, double tg) {
   position::Position result{};
 
-  result.y = floor(camera_position.y / map::kBlockSize) * map::kBlockSize + (geometry::isUp(angle) ? -1.0f : 64.0f);
+  result.y = floor(camera_position.y / map::kBlockSize) * map::kBlockSize + (geometry::isUp(angle) ? -1.f : 64.f);
   result.x = camera_position.x + (camera_position.y - result.y) / tg;
 
   return result;
@@ -44,7 +44,9 @@ position::Position findFirstVerticalIntersection(position::Position camera_posit
   return result;
 }
 
-position::Position findVerticalWallIntersection(position::Position camera_position, double angle, map::Map &map) {
+position::Position findVerticalWallIntersection(position::Position camera_position,
+                                                double angle,
+                                                map::Map &map) {
   double tg = tan(angle);
 
   auto gridIntersection = findFirstVerticalIntersection(camera_position, angle, tg);
@@ -67,14 +69,14 @@ double findDistance(position::Position intersection_position, position::Position
 }
 
 bool isLeft(double angle) {
-  return (angle > k90_degree && angle < k270_degree);
+  return (angle > k90_degree && angle <= k270_degree);
 }
 
 bool isUp(double angle) {
-  return angle < k180_degree;
+  return angle <= k180_degree;
 }
 
-int Mod(double a, double b) {
+int mod(double a, double b) {
   double result = std::fmod(a, b);
   if (result < 0) {
     result += b;

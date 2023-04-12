@@ -2,8 +2,8 @@
 // Created by Stefano on 3/13/2023.
 //
 
-#ifndef ISRA_SRC_RADIANS_RADIANS_H_
-#define ISRA_SRC_RADIANS_RADIANS_H_
+#ifndef ISRA_SRC_GEOMETRY_GEOMETRY_H_
+#define ISRA_SRC_GEOMETRY_GEOMETRY_H_
 #include <position.h>
 #include <map.h>
 
@@ -32,6 +32,6 @@ position::Position findVerticalWallIntersection(position::Position camera_positi
 double findDistance(position::Position intersection_position, position::Position camera_position);
 bool isLeft(double angle);
 bool isUp(double angle);
-int Mod(double a, double b);
+int mod(double a, double b);
 }
-#endif //ISRA_SRC_RADIANS_RADIANS_H_
+#endif //ISRA_SRC_GEOMETRY_GEOMETRY_H_

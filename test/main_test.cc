@@ -89,6 +89,17 @@ TEST(findVerticalWallIntersection_Left, Expect_FirstVerticalWallIntersection_Lef
   EXPECT_NEAR(expected.y, result.y, 3);
 }
 
+TEST(findVerticalWallIntersection, Expect_RightWallIntersection) {
+
+  map::Map map = map::Map::GetBasicMap();
+
+  position::Position expected = {192, 150};
+  auto result = geometry::findVerticalWallIntersection({96, 96}, geometry::k330_degree, map);
+
+  EXPECT_NEAR(expected.x, result.x, 3);
+  EXPECT_NEAR(expected.y, result.y, 3);
+}
+
 TEST(findFirstVerticalIntersection_Left, Expect_FirstVerticalIntersection_Left) {
 
   map::Map map = map::Map::GetBasicMap();

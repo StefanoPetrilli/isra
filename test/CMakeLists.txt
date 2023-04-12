@@ -11,7 +11,8 @@ target_link_libraries(isra_test
         map
         geometry
         texture
-        color)
+        color
+        radians)
 
 include(GoogleTest)
 gtest_discover_tests(isra_test)
