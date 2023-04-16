@@ -7,23 +7,26 @@
 
 #include <color.h>
 #include <texture.h>
+#include <geometry.h>
 
 #include <vector>
 #include <cmath>
 
 namespace rendering_engine {
 class RenderingEngine {
-  int width_;
-  int height_;
+  int scene_width_;
+  int scene_height_;
   std::vector<unsigned char> pixels_;
   static std::vector<texture::Texture> textures_;
+  double distance_from_projection_plane_;
+  double camera_height_;
 
  public:
-  RenderingEngine() : RenderingEngine(0, 0) {}
+  RenderingEngine() : RenderingEngine(0, 0, 0) {}
   std::vector<unsigned char> &GetPixels();
-  RenderingEngine(int width, int height);
-  int GetWidth() const { return width_; }
-  int GetHeight() const { return height_; }
+  RenderingEngine(int scene_width, int scene_height, double camera_height);
+  int GetWidth() const { return scene_width_; }
+  int GetHeight() const { return scene_height_; }
   void SetColor(int column, int row, color::ColorRGB color);
   void SetColor(int column, int row, color::ColorRGB color, double intensity);
   void SetColorLine(int column,
@@ -36,6 +39,17 @@ class RenderingEngine {
   static texture::Texture GetTexture(int index);
   double GetLightSourceConstant() const;
   double GetLightIntensity(double distance) const;
+  int GetSceneWidth() const;
+  int GetSceneHeight() const;
+  double GetDistanceFromProjectionPlane() const;
+  double GetCameraHeight() const;
+  void DrawCeiling(int current_column, int columns_height, double height);
+  void DrawFloor(int current_column,
+                 double beta,
+                 int columns_height,
+                 double height,
+                 double angle,
+                 position::Position position);
 };
 int MapToTileSize(double coordinate, double range_size, double tile_size);
 }

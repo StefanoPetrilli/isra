@@ -16,10 +16,7 @@ Camera::Camera(int scene_width, int scene_height, double camera_height) {
   scene_height_ = scene_height;
   scene_width_ = scene_width;
   height_constant_ = map::kBlockSize * (static_cast<double>(this->GetSceneHeight()) / 2.) / 1.732050;
-  distance_from_projection_plane_ =
-      (static_cast<double>(this->GetSceneWidth()) / 2.)
-          / std::tan(geometry::k60_degree); //TODO lockup table for tan;
-  engine_ = rendering_engine::RenderingEngine(scene_width, scene_height);
+  engine_ = rendering_engine::RenderingEngine(scene_width, scene_height, camera_height);
 }
 
 double Camera::GetFovInRadians() const {
@@ -28,10 +25,6 @@ double Camera::GetFovInRadians() const {
 
 position::Position Camera::GetPosition() {
   return position_;
-}
-
-double Camera::GetCameraHeight() const {
-  return camera_height_;
 }
 
 int Camera::GetSceneWidth() const {
@@ -44,10 +37,6 @@ int Camera::GetSceneHeight() const {
 
 double Camera::GetHeightConstant() const {
   return height_constant_;
-}
-
-double Camera::GetDistanceFromProjectionPlane() const {
-  return distance_from_projection_plane_;
 }
 
 double Camera::GetMoveStep() const {
@@ -148,33 +137,7 @@ void Camera::DrawColumn(int column, double angle, int columns_height, map::Map &
       texture_column);
 
   double beta = std::abs(angle - GetFacingDirectionInRadians());
-  DrawFloor(column, beta, columns_height, height, angle);
-  DrawCeiling(column, columns_height, height);
-}
-
-void Camera::DrawFloor(int current_column, double beta, int columns_height, double height, double angle) {
-  double straight_line_distance, real_distance, light_intensity;
-  double x_texture, y_texture;
-  for (int current_row = (int) ((columns_height - height) / 2); current_row > 0; --current_row) {
-    straight_line_distance =
-        GetDistanceFromProjectionPlane() * GetCameraHeight()
-            / (current_row - (static_cast<double>(columns_height) / 2.)); // TODO extract this function
-    real_distance = straight_line_distance / cos(beta);
-    light_intensity = engine_.GetLightIntensity(real_distance);
-
-    y_texture = straight_line_distance * sin(angle) + GetPosition().y;
-    x_texture = straight_line_distance * cos(angle) - GetPosition().x;
-
-    color::ColorRGB color = rendering_engine::RenderingEngine::GetTexture(1).getColor(geometry::mod(x_texture, map::kBlockSize),
-                                                   geometry::mod(y_texture, map::kBlockSize));
-
-    engine_.SetColor(current_column, current_row, color, light_intensity);
-  }
-}
-
-void Camera::DrawCeiling(int current_column, int columns_height, double height) {
-  for (int current_row = (int) ((columns_height + height) / 2.); current_row < GetSceneHeight(); ++current_row) {
-    engine_.SetColor(current_column, current_row, color::kBlack);
-  }
+  engine_.DrawFloor(column, beta, columns_height, height, angle, GetPosition());
+  engine_.DrawCeiling(column, columns_height, height);
 }
 }
