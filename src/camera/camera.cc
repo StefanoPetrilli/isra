@@ -94,13 +94,6 @@ double Camera::GetLightIntensity(double distance) const {
   return std::min((GetLightSourceConstant() / std::pow(distance, 2)), 1.);
 }
 
-void Camera::LoadTexture(const char *path) {
-  textures_.emplace_back(path);
-}
-
-texture::Texture Camera::GetTexture(int index) {
-  return textures_[index];
-}
 double Camera::GetRotationStep() const {
   return rotation_step_;
 }
@@ -158,7 +151,7 @@ void Camera::DrawColumn(int column, double angle, int columns_height, map::Map &
       column,
       (int) floor((columns_height - height) / 2),
       (int) ((columns_height + height) / 2),
-      GetTexture(0), //TODO chose how to select textures dinamically
+      rendering_engine::RenderingEngine::GetTexture(0), //TODO chose how to select textures dinamically
       light_intensity,
       texture_column);
 
@@ -180,7 +173,7 @@ void Camera::DrawFloor(int current_column, double beta, int columns_height, doub
     y_texture = straight_line_distance * sin(angle) + GetPosition().y;
     x_texture = straight_line_distance * cos(angle) - GetPosition().x;
 
-    color::ColorRGB color = GetTexture(1).getColor(geometry::mod(x_texture, map::kBlockSize),
+    color::ColorRGB color = rendering_engine::RenderingEngine::GetTexture(1).getColor(geometry::mod(x_texture, map::kBlockSize),
                                                    geometry::mod(y_texture, map::kBlockSize));
 
     engine_.SetColor(current_column, current_row, color, light_intensity);

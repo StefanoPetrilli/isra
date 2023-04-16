@@ -15,6 +15,7 @@ class RenderingEngine {
   int width_;
   int height_;
   std::vector<unsigned char> pixels_;
+  static std::vector<texture::Texture> textures_;
 
  public:
   RenderingEngine() : RenderingEngine(0, 0) {}
@@ -30,6 +31,8 @@ class RenderingEngine {
                     const texture::Texture &texture,
                     double intensity,
                     int texture_vertical_coordinate);
+  static void LoadTexture(const char *path);
+  static texture::Texture GetTexture(int index);
 };
 int MapToTileSize(double coordinate, double range_size, double tile_size);
 }

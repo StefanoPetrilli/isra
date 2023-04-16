@@ -5,6 +5,8 @@
 #include "rendering_engine.h"
 
 namespace rendering_engine {
+std::vector<texture::Texture> RenderingEngine::textures_;
+
 rendering_engine::RenderingEngine::RenderingEngine(int width, int height) {
   width_ = width;
   height_ = height;
@@ -38,6 +40,14 @@ void RenderingEngine::SetColorLine(int column,
 
 std::vector<unsigned char> &RenderingEngine::GetPixels() {
   return pixels_;
+}
+
+void RenderingEngine::LoadTexture(const char *path) {
+  textures_.emplace_back(path);
+}
+
+texture::Texture RenderingEngine::GetTexture(int index) {
+  return textures_[index];
 }
 
 int MapToTileSize(double coordinate, double range_size, double tile_size) {

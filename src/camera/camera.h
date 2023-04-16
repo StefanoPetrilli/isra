@@ -24,7 +24,6 @@ class Camera {
   int scene_height_;
   int scene_width_;
   const double kFOV_ = geometry::k60_degree;
-  std::vector<texture::Texture> textures_;
   double height_constant_;
   double distance_from_projection_plane_;
   const double light_source_constant_ = 4000; //TODO
@@ -58,8 +57,6 @@ class Camera {
   double GetMoveStep() const;
   std::vector<unsigned char> &GetPixels();
   void Draw(int columns_number, int columns_height, map::Map &map);
-  void LoadTexture(const char *path);
-  texture::Texture GetTexture(int index);
 };
 }
 #endif //ISRA_SRC_PLAYER_CAMERA_H_
