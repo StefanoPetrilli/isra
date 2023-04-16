@@ -12,7 +12,7 @@ target_link_libraries(isra_test
         geometry
         texture
         color
-        radians)
+        rendering_engine)
 
 include(GoogleTest)
 gtest_discover_tests(isra_test)

@@ -5,7 +5,7 @@
 #include <map.h>
 #include <geometry.h>
 #include <texture.h>
-#include <camera.h>
+#include <rendering_engine.h>
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
@@ -113,7 +113,7 @@ TEST(findFirstVerticalIntersection_Left, Expect_FirstVerticalIntersection_Left) 
 
 TEST(Texture, Expect_Constructor_ToLoadTexture) {
 
-  char *image_path = "assets/test_all_black.ppm";
+  const char *image_path = "assets/test_all_black.ppm";
   auto texture = texture::Texture(image_path);
 
   auto result = texture.GetData();
@@ -124,28 +124,28 @@ TEST(Texture, Expect_Constructor_ToLoadTexture) {
 
 TEST(Texture, When_WrongFileName_Expect_Exception) {
 
-  char *image_path = "assets/test_all_black_no_file.ppm";
+  const char *image_path = "assets/test_all_black_no_file.ppm";
 
   EXPECT_THROW(auto texture = texture::Texture(image_path), std::invalid_argument);
 }
 
 TEST(Texture, When_WrongEncoding_Expect_Exception) {
 
-  char *image_path = "assets/test_all_black_wrong_encoding.ppm";
+  const char *image_path = "assets/test_all_black_wrong_encoding.ppm";
 
   EXPECT_THROW(auto texture = texture::Texture(image_path), std::invalid_argument);
 }
 
 TEST(Texture, When_WrongDimension_Expect_Exception) {
 
-  char *image_path = "assets/test_all_black_wrong_dimension.ppm";
+  const char *image_path = "assets/test_all_black_wrong_dimension.ppm";
 
   EXPECT_THROW(auto texture = texture::Texture(image_path), std::invalid_argument);
 }
 
 TEST(Texture, When_WrongMaxValue_Expect_Exception) {
 
-  char *image_path = "assets/test_all_black_wrong_max_value.ppm";
+  const char *image_path = "assets/test_all_black_wrong_max_value.ppm";
 
   EXPECT_THROW(auto texture = texture::Texture(image_path), std::invalid_argument);
 }
@@ -154,7 +154,7 @@ TEST(MapToTileSize, When_Coordinate_IsEqualTo_RangeSize_Return_TileSizeMinus1) {
   auto coordinate = 64;
   auto range_size = 64;
   auto tile_size = 64;
-  auto result = camera::MapToTileSize(coordinate, range_size, tile_size);
+  auto result = rendering_engine::MapToTileSize(coordinate, range_size, tile_size);
   auto expected = tile_size - 1;
   EXPECT_EQ(expected, result);
 }
@@ -163,7 +163,7 @@ TEST(MapToTileSize, When_Coordinate_IsEqualTo_0_Return_0) {
   auto coordinate = 0;
   auto range_size = 64;
   auto tile_size = 64;
-  auto result = camera::MapToTileSize(coordinate, range_size, tile_size);
+  auto result = rendering_engine::MapToTileSize(coordinate, range_size, tile_size);
   auto expected = 0;
   EXPECT_EQ(expected, result);
 }
