@@ -83,4 +83,12 @@ int mod(double a, double b) {
   }
   return static_cast<int>(result);
 }
+
+double dmod(double a, double b) {
+  double result = std::fmod(a, b);
+  if (result < 0) {
+    result += b;
+  }
+  return result;
+}
 }

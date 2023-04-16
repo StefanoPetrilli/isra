@@ -21,7 +21,7 @@ const double k180_degree = 3.1415926536;
 const double k270_degree = 4.7123889804;
 const double k300_degree = 5.235987756;
 const double k330_degree = 5.759586531;
-const double k359_degree = 6.26573;
+const double k359_degree =  6.28318531;
 
 position::Position findFirstHorizontalIntersection(position::Position camera_position, double angle, double tg);
 position::Position findHorizontalWallIntersection(position::Position camera_position,
@@ -33,5 +33,6 @@ double findDistance(position::Position intersection_position, position::Position
 bool isLeft(double angle);
 bool isUp(double angle);
 int mod(double a, double b);
+double dmod(double a, double b);
 }
 #endif //ISRA_SRC_GEOMETRY_GEOMETRY_H_

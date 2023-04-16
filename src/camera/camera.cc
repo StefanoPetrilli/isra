@@ -13,6 +13,7 @@ Camera::Camera(int scene_width, int scene_height, double camera_height) {
   };
   camera_height_ = camera_height;
   scene_height_ = scene_height;
+  scene_height_ = scene_height;
   scene_width_ = scene_width;
   height_constant_ = map::kBlockSize * (static_cast<double>(this->GetSceneHeight()) / 2.) / 1.732050;
   distance_from_projection_plane_ =
@@ -85,13 +86,11 @@ void Camera::MoveForward() {
 }
 
 void Camera::RotateLeft() {
-  view_direction_in_radians_ += GetRotationStep();
-  if (view_direction_in_radians_ > geometry::k359_degree) view_direction_in_radians_ = geometry::k1_degree;
+  view_direction_in_radians_ = geometry::dmod(view_direction_in_radians_ + GetRotationStep(), geometry::k359_degree);
 }
 
 void Camera::RotateRight() {
-  view_direction_in_radians_ -= GetRotationStep();
-  if (view_direction_in_radians_ < geometry::k1_degree) view_direction_in_radians_ = geometry::k359_degree;
+  view_direction_in_radians_ = geometry::dmod(view_direction_in_radians_ - GetRotationStep(), geometry::k359_degree);
 }
 
 double Camera::GetFacingDirectionInRadians() const {
@@ -154,9 +153,7 @@ void Camera::Draw(int columns_number, int columns_height, map::Map &map) {
   double angle = GetFacingDirectionInRadians() - (camera::Camera::GetFovInRadians() / 2);
 
   for (int current_column = columns_number; current_column > 0; --current_column) {
-    angle += ray_step;
-    if (angle > geometry::k359_degree) angle = 0;
-    if (angle < 0) angle = geometry::k359_degree + geometry::k1_degree;
+    angle = geometry::dmod(angle + ray_step, geometry::k359_degree);
     DrawColumn(current_column, angle, columns_height, map);
   }
 }
