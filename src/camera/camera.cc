@@ -50,10 +50,6 @@ double Camera::GetDistanceFromProjectionPlane() const {
   return distance_from_projection_plane_;
 }
 
-double Camera::GetLightSourceConstant() const {
-  return light_source_constant_;
-}
-
 double Camera::GetMoveStep() const {
   return move_step_;
 }
@@ -88,10 +84,6 @@ double Camera::GetFacingDirectionInRadians() const {
 
 std::vector<unsigned char> &Camera::GetPixels() {
   return engine_.GetPixels();
-}
-
-double Camera::GetLightIntensity(double distance) const {
-  return std::min((GetLightSourceConstant() / std::pow(distance, 2)), 1.);
 }
 
 double Camera::GetRotationStep() const {
@@ -145,7 +137,7 @@ void Camera::DrawColumn(int column, double angle, int columns_height, map::Map &
   auto texture_column = static_cast<int>(nearest_intersection) % static_cast<int>(map::kBlockSize);
 
   double height = GetHeightConstant() / min_distance;
-  double light_intensity = GetLightIntensity(min_distance);
+  double light_intensity = engine_.GetLightIntensity(min_distance);
 
   engine_.SetColorLine(
       column,
@@ -168,7 +160,7 @@ void Camera::DrawFloor(int current_column, double beta, int columns_height, doub
         GetDistanceFromProjectionPlane() * GetCameraHeight()
             / (current_row - (static_cast<double>(columns_height) / 2.)); // TODO extract this function
     real_distance = straight_line_distance / cos(beta);
-    light_intensity = GetLightIntensity(real_distance);
+    light_intensity = engine_.GetLightIntensity(real_distance);
 
     y_texture = straight_line_distance * sin(angle) + GetPosition().y;
     x_texture = straight_line_distance * cos(angle) - GetPosition().x;

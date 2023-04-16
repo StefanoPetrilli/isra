@@ -50,6 +50,14 @@ texture::Texture RenderingEngine::GetTexture(int index) {
   return textures_[index];
 }
 
+double RenderingEngine::GetLightSourceConstant() const {
+  return 4000.;
+}
+
+double RenderingEngine::GetLightIntensity(double distance) const {
+  return std::min((GetLightSourceConstant() / std::pow(distance, 2)), 1.);
+}
+
 int MapToTileSize(double coordinate, double range_size, double tile_size) {
   return static_cast<int>(coordinate / range_size * --tile_size);
 }

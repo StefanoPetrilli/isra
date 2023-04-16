@@ -9,6 +9,7 @@
 #include <texture.h>
 
 #include <vector>
+#include <cmath>
 
 namespace rendering_engine {
 class RenderingEngine {
@@ -33,6 +34,8 @@ class RenderingEngine {
                     int texture_vertical_coordinate);
   static void LoadTexture(const char *path);
   static texture::Texture GetTexture(int index);
+  double GetLightSourceConstant() const;
+  double GetLightIntensity(double distance) const;
 };
 int MapToTileSize(double coordinate, double range_size, double tile_size);
 }
