@@ -11,8 +11,6 @@ Camera::Camera(int scene_width, int scene_height, double camera_height) {
   position_ = {
       .x = 100., .y = 100.
   };
-  camera_height_ = camera_height;
-  scene_height_ = scene_height;
   scene_height_ = scene_height;
   scene_width_ = scene_width;
   engine_ = rendering_engine::RenderingEngine(scene_width, scene_height, camera_height);
@@ -92,13 +90,7 @@ void Camera::Move(int key) {
   }
 }
 
-void Camera::Draw(int columns_number, int columns_height, map::Map &map) {
-  double ray_step = camera::Camera::GetFovInRadians() / columns_number;
-  double angle = GetFacingDirectionInRadians() - (camera::Camera::GetFovInRadians() / 2);
-
-  for (int current_column = columns_number; current_column > 0; --current_column) {
-    angle = geometry::dmod(angle + ray_step, geometry::k359_degree);
-    engine_.DrawColumn(current_column, angle, columns_height, map, GetPosition(), GetFacingDirectionInRadians());
-  }
+void Camera::Draw(map::Map &map) {
+  engine_.Draw(GetSceneWidth(), GetSceneHeight(), GetFovInRadians(), map, GetFacingDirectionInRadians(), GetPosition());
 }
 }

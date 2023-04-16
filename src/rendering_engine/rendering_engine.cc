@@ -23,7 +23,7 @@ void RenderingEngine::SetColor(int column, int row, color::ColorRGB color, doubl
 }
 
 void RenderingEngine::SetColor(int column, int row, color::ColorRGB color) {
-  auto index = (column + (row * GetWidth())) * 3;
+  auto index = (column + (row * GetSceneWidth())) * 3;
   pixels_[index] = color.r;
   pixels_[index + 1] = color.g;
   pixels_[index + 2] = color.b;
@@ -69,6 +69,21 @@ int RenderingEngine::GetSceneWidth() const {
 
 int RenderingEngine::GetSceneHeight() const {
   return scene_height_;
+}
+
+void RenderingEngine::Draw(int columns_number,
+                           int columns_height,
+                           double fov,
+                           map::Map &map,
+                           double facing_direction,
+                           position::Position position) {
+  double ray_step = fov / columns_number;
+  double angle = facing_direction - (fov / 2);
+
+  for (int current_column = columns_number; current_column > 0; --current_column) {
+    angle = geometry::dmod(angle + ray_step, geometry::k359_degree);
+    DrawColumn(current_column, angle, columns_height, map, position, facing_direction);
+  }
 }
 
 void RenderingEngine::DrawColumn(int column,

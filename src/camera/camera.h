@@ -20,7 +20,6 @@ namespace camera {
 class Camera {
   position::Position position_{};
   double view_direction_in_radians_;
-  double camera_height_;
   int scene_height_;
   int scene_width_;
   const double kFOV_ = geometry::k60_degree;
@@ -45,7 +44,7 @@ class Camera {
   double GetRotationStep() const;
   double GetMoveStep() const;
   std::vector<unsigned char> &GetPixels();
-  void Draw(int columns_number, int columns_height, map::Map &map);
+  void Draw(map::Map &map);
 };
 }
 #endif //ISRA_SRC_PLAYER_CAMERA_H_

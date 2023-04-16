@@ -21,23 +21,6 @@ class RenderingEngine {
   double distance_from_projection_plane_;
   double camera_height_;
   double height_constant_;
-
- public:
-  RenderingEngine() : RenderingEngine(0, 0, 0) {}
-  std::vector<unsigned char> &GetPixels();
-  RenderingEngine(int scene_width, int scene_height, double camera_height);
-  int GetWidth() const { return scene_width_; }
-  int GetHeight() const { return scene_height_; }
-  void SetColor(int column, int row, color::ColorRGB color);
-  void SetColor(int column, int row, color::ColorRGB color, double intensity);
-  void SetColorLine(int column,
-                    int bottom,
-                    int top,
-                    const texture::Texture &texture,
-                    double intensity,
-                    int texture_vertical_coordinate);
-  static void LoadTexture(const char *path);
-  static texture::Texture GetTexture(int index);
   double GetLightSourceConstant() const;
   double GetLightIntensity(double distance) const;
   int GetSceneWidth() const;
@@ -58,6 +41,27 @@ class RenderingEngine {
                   map::Map &map,
                   position::Position position,
                   double facing_direction);
+  void SetColor(int column, int row, color::ColorRGB color);
+  void SetColor(int column, int row, color::ColorRGB color, double intensity);
+  void SetColorLine(int column,
+                    int bottom,
+                    int top,
+                    const texture::Texture &texture,
+                    double intensity,
+                    int texture_vertical_coordinate);
+
+ public:
+  RenderingEngine() : RenderingEngine(0, 0, 0) {}
+  std::vector<unsigned char> &GetPixels();
+  RenderingEngine(int scene_width, int scene_height, double camera_height);
+  static void LoadTexture(const char *path);
+  static texture::Texture GetTexture(int index);
+  void Draw(int columns_number,
+            int columns_height,
+            double fov,
+            map::Map &map,
+            double facing_direction,
+            position::Position position);
 };
 int MapToTileSize(double coordinate, double range_size, double tile_size);
 }
