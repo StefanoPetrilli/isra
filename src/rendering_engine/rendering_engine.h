@@ -20,6 +20,7 @@ class RenderingEngine {
   static std::vector<texture::Texture> textures_;
   double distance_from_projection_plane_;
   double camera_height_;
+  double height_constant_;
 
  public:
   RenderingEngine() : RenderingEngine(0, 0, 0) {}
@@ -50,6 +51,13 @@ class RenderingEngine {
                  double height,
                  double angle,
                  position::Position position);
+  double GetHeightConstant() const;
+  void DrawColumn(int column,
+                  double angle,
+                  int columns_height,
+                  map::Map &map,
+                  position::Position position,
+                  double facing_direction);
 };
 int MapToTileSize(double coordinate, double range_size, double tile_size);
 }

@@ -24,7 +24,6 @@ class Camera {
   int scene_height_;
   int scene_width_;
   const double kFOV_ = geometry::k60_degree;
-  double height_constant_;
   double rotation_step_ = geometry::k1_degree;
   double move_step_ = 1.;
   rendering_engine::RenderingEngine engine_;
@@ -34,7 +33,6 @@ class Camera {
   void MoveLeft();
   void RotateLeft();
   void RotateRight();
-  void DrawColumn(int column, double angle, int columns_height, map::Map &map);
 
  public:
   Camera(int scene_width, int scene_height, double camera_height);
@@ -44,7 +42,6 @@ class Camera {
   position::Position GetPosition();
   int GetSceneWidth() const;
   int GetSceneHeight() const;
-  double GetHeightConstant() const;
   double GetRotationStep() const;
   double GetMoveStep() const;
   std::vector<unsigned char> &GetPixels();
