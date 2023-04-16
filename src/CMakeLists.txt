@@ -4,6 +4,7 @@ add_subdirectory(color)
 add_subdirectory(geometry)
 add_subdirectory(map)
 add_subdirectory(position)
+add_subdirectory(rendering_engine)
 add_subdirectory(texture)
 add_subdirectory(window)
 

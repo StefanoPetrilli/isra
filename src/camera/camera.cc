@@ -19,7 +19,7 @@ Camera::Camera(int scene_width, int scene_height, double camera_height) {
   distance_from_projection_plane_ =
       (static_cast<double>(this->GetSceneWidth()) / 2.)
           / std::tan(geometry::k60_degree); //TODO lockup table for tan;
-  pixels_ = std::vector<unsigned char>(this->GetSceneWidth() * this->GetSceneHeight() * 3, 0);
+  engine_ = rendering_engine::RenderingEngine(scene_width, scene_height);
 }
 
 double Camera::GetFovInRadians() const {
@@ -58,17 +58,6 @@ double Camera::GetMoveStep() const {
   return move_step_;
 }
 
-void Camera::SetColor(int column, int row, color::ColorRGB color) {
-  auto index = (column + (row * GetSceneWidth())) * 3;
-  pixels_[index] = color.r;
-  pixels_[index + 1] = color.g;
-  pixels_[index + 2] = color.b;
-}
-
-void Camera::SetColor(int column, int row, color::ColorRGB color, double intensity) {
-  SetColor(column, row, color * intensity);
-}
-
 void Camera::MoveLeft() {
   position_.x -= GetMoveStep();
 }
@@ -98,7 +87,7 @@ double Camera::GetFacingDirectionInRadians() const {
 }
 
 std::vector<unsigned char> &Camera::GetPixels() {
-  return pixels_;
+  return engine_.GetPixels();
 }
 
 double Camera::GetLightIntensity(double distance) const {
@@ -114,20 +103,6 @@ texture::Texture Camera::GetTexture(int index) {
 }
 double Camera::GetRotationStep() const {
   return rotation_step_;
-}
-
-void Camera::SetColorLine(int column,
-                          int bottom,
-                          int top,
-                          const texture::Texture &texture,
-                          double intensity,
-                          int texture_vertical_coordinate) {
-  for (int i = top, range_size = top - bottom; i > bottom; --i) {
-    SetColor(column,
-             i,
-             texture.getColor(texture_vertical_coordinate, MapToTileSize(i - bottom, range_size, map::kBlockSize))
-                 * intensity);
-  }
 }
 
 void Camera::Move(int key) {
@@ -179,7 +154,7 @@ void Camera::DrawColumn(int column, double angle, int columns_height, map::Map &
   double height = GetHeightConstant() / min_distance;
   double light_intensity = GetLightIntensity(min_distance);
 
-  SetColorLine(
+  engine_.SetColorLine(
       column,
       (int) floor((columns_height - height) / 2),
       (int) ((columns_height + height) / 2),
@@ -208,17 +183,13 @@ void Camera::DrawFloor(int current_column, double beta, int columns_height, doub
     color::ColorRGB color = GetTexture(1).getColor(geometry::mod(x_texture, map::kBlockSize),
                                                    geometry::mod(y_texture, map::kBlockSize));
 
-    SetColor(current_column, current_row, color, light_intensity);
+    engine_.SetColor(current_column, current_row, color, light_intensity);
   }
 }
 
 void Camera::DrawCeiling(int current_column, int columns_height, double height) {
   for (int current_row = (int) ((columns_height + height) / 2.); current_row < GetSceneHeight(); ++current_row) {
-    SetColor(current_column, current_row, color::kBlack);
+    engine_.SetColor(current_column, current_row, color::kBlack);
   }
-}
-
-int MapToTileSize(double coordinate, double range_size, double tile_size) {
-  return static_cast<int>(coordinate / range_size * --tile_size);
 }
 }
