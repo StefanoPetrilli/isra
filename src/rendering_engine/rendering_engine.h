@@ -21,7 +21,7 @@ class RenderingEngine {
   double distance_from_projection_plane_;
   double camera_height_;
   double height_constant_;
-  double GetLightSourceConstant() const;
+  static double GetLightSourceConstant() ;
   double GetLightIntensity(double distance) const;
   int GetSceneWidth() const;
   int GetSceneHeight() const;
@@ -56,12 +56,7 @@ class RenderingEngine {
   RenderingEngine(int scene_width, int scene_height, double camera_height);
   static void LoadTexture(const char *path);
   static texture::Texture GetTexture(int index);
-  void Draw(int columns_number,
-            int columns_height,
-            double fov,
-            map::Map &map,
-            double facing_direction,
-            position::Position position);
+  void Draw(double fov, map::Map &map, double facing_direction, position::Position position);
 };
 int MapToTileSize(double coordinate, double range_size, double tile_size);
 }

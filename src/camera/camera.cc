@@ -91,6 +91,6 @@ void Camera::Move(int key) {
 }
 
 void Camera::Draw(map::Map &map) {
-  engine_.Draw(GetSceneWidth(), GetSceneHeight(), GetFovInRadians(), map, GetFacingDirectionInRadians(), GetPosition());
+  engine_.Draw(GetFovInRadians(), map, GetFacingDirectionInRadians(), GetPosition());
 }
 }
