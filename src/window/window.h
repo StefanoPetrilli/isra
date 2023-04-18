@@ -24,7 +24,7 @@ class Window {
 
  public:
   Window(const std::string &window_name, camera::Camera *camera);
-  void MainLoop(camera::Camera *camera, map::Map &map);
+  void MainLoop(camera::Camera *camera);
 };
 }
 

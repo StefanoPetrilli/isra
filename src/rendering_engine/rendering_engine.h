@@ -8,6 +8,7 @@
 #include <color.h>
 #include <texture.h>
 #include <geometry.h>
+#include <distance_shader.h>
 
 #include <vector>
 #include <cmath>
@@ -21,8 +22,10 @@ class RenderingEngine {
   double distance_from_projection_plane_;
   double camera_height_;
   double height_constant_;
-  static double GetLightSourceConstant() ;
-  double GetLightIntensity(double distance) const;
+  map::Map map_;
+  distance_shader::DistanceShader distance_shader_;
+  static double GetLightSourceConstant();
+  double GetLightIntensity(int distance) const;
   int GetSceneWidth() const;
   int GetSceneHeight() const;
   double GetDistanceFromProjectionPlane() const;
@@ -35,12 +38,7 @@ class RenderingEngine {
                  double angle,
                  position::Position position);
   double GetHeightConstant() const;
-  void DrawColumn(int column,
-                  double angle,
-                  int columns_height,
-                  map::Map &map,
-                  position::Position position,
-                  double facing_direction);
+  void DrawColumn(int column, double angle, int columns_height, position::Position position, double facing_direction);
   void SetColor(int column, int row, color::ColorRGB color);
   void SetColor(int column, int row, color::ColorRGB color, double intensity);
   void SetColorLine(int column,
@@ -51,13 +49,13 @@ class RenderingEngine {
                     int texture_vertical_coordinate);
 
  public:
-  RenderingEngine() : RenderingEngine(0, 0, 0) {}
+  RenderingEngine() : RenderingEngine(0, 0, 0, map::Map::GetBasicMap()) {}
   std::vector<unsigned char> &GetPixels();
-  RenderingEngine(int scene_width, int scene_height, double camera_height);
+  RenderingEngine(int scene_width, int scene_height, double camera_height, map::Map map);
   static void LoadTexture(const char *path);
-  static texture::Texture GetTexture(int index);
-  void Draw(double fov, map::Map &map, double facing_direction, position::Position position);
   static texture::Texture &GetTexture(int index);
+  void Draw(double fov, double facing_direction, position::Position position);
+  map::Map &GetMap();
 };
 int MapToTileSize(double coordinate, double range_size, double tile_size);
 }

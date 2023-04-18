@@ -34,7 +34,7 @@ class Camera {
   void RotateRight();
 
  public:
-  Camera(int scene_width, int scene_height, double camera_height);
+  Camera(int scene_width, int scene_height, double camera_height, map::Map &map);
   void Move(int key);
   double GetFacingDirectionInRadians() const;
   double GetFovInRadians() const;
@@ -44,7 +44,7 @@ class Camera {
   double GetRotationStep() const;
   double GetMoveStep() const;
   std::vector<unsigned char> &GetPixels();
-  void Draw(map::Map &map);
+  void Draw();
 };
 }
 #endif //ISRA_SRC_PLAYER_CAMERA_H_

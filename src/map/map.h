@@ -35,7 +35,6 @@ const static tMap kBasicMap = {{1, 1, 1, 1},
                                {1, 1, 1, 1}};
 
 class Map {
-
   explicit Map(tMap map);
   tMap map_{};
 
@@ -48,6 +47,7 @@ class Map {
   static int MapToMap(double x);
   bool IsInside(position::Position position);
   bool IsWall(position::Position position);
+  Map() : Map(kBasicMap) {}
 };
 }
 #endif //ISRA_SRC_MAP_MAP_H_

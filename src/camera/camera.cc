@@ -6,14 +6,14 @@
 
 namespace camera {
 
-Camera::Camera(int scene_width, int scene_height, double camera_height) {
+Camera::Camera(int scene_width, int scene_height, double camera_height, map::Map &map) {
   view_direction_in_radians_ = 0.;
   position_ = {
       .x = 100., .y = 100.
   };
   scene_height_ = scene_height;
   scene_width_ = scene_width;
-  engine_ = rendering_engine::RenderingEngine(scene_width, scene_height, camera_height);
+  engine_ = rendering_engine::RenderingEngine(scene_width, scene_height, camera_height, map);
 }
 
 double Camera::GetFovInRadians() const {
@@ -90,7 +90,7 @@ void Camera::Move(int key) {
   }
 }
 
-void Camera::Draw(map::Map &map) {
-  engine_.Draw(GetFovInRadians(), map, GetFacingDirectionInRadians(), GetPosition());
+void Camera::Draw() {
+  engine_.Draw(GetFovInRadians(), GetFacingDirectionInRadians(), GetPosition());
 }
 }

@@ -58,13 +58,13 @@ Window::Window(const std::string &window_name, camera::Camera *camera) {
 
 }
 
-void Window::MainLoop(camera::Camera *camera, map::Map &map) {
+void Window::MainLoop(camera::Camera *camera) {
   while (!glfwWindowShouldClose(window_)) {
     std::cout << camera->GetPosition().x << "; " << camera->GetPosition().y << " - "
               << camera->GetFacingDirectionInRadians()
               << std::endl;
 
-    camera->Draw(map);
+    camera->Draw();
 
     glTexSubImage2D(GL_TEXTURE_2D,
                     0,
