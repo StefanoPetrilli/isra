@@ -57,6 +57,7 @@ class RenderingEngine {
   static void LoadTexture(const char *path);
   static texture::Texture GetTexture(int index);
   void Draw(double fov, map::Map &map, double facing_direction, position::Position position);
+  static texture::Texture &GetTexture(int index);
 };
 int MapToTileSize(double coordinate, double range_size, double tile_size);
 }

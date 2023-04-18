@@ -51,8 +51,8 @@ void RenderingEngine::LoadTexture(const char *path) {
   textures_.emplace_back(path);
 }
 
-texture::Texture RenderingEngine::GetTexture(int index) {
-  return textures_[index];
+texture::Texture &RenderingEngine::GetTexture(int index) {
+  return textures_.at(index);
 }
 
 double RenderingEngine::GetLightSourceConstant() {
