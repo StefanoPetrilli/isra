@@ -90,6 +90,6 @@ void Texture::IsReadSuccessfull(const std::string &value) {
 
 //TODO test this function
 color::ColorRGB Texture::GetColor(int x, int y) const {
-  return data_.at(y * GetWidth() + x);
+  return data_[y * GetWidth() + x];
 }
 }

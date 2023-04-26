@@ -7,7 +7,7 @@
 namespace map {
 
 std::size_t Map::GetWidth() {
-  return map_.at(0).size();
+  return map_[0].size();
 }
 
 std::size_t Map::GetHeight() {
@@ -15,7 +15,7 @@ std::size_t Map::GetHeight() {
 }
 
 bool Map::IsWall(int x, int y) {
-  return map_.at(y).at(x);
+  return map_[y][x];
 }
 
 Map::Map(tMap map) {

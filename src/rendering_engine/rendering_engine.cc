@@ -23,20 +23,20 @@ rendering_engine::RenderingEngine::RenderingEngine(int scene_width,
   distance_shader_ = distance_shader::DistanceShader(std::max(map.GetWidth(), map.GetHeight()) * map::kBlockSize * 2); // TODO fix this
 }
 
-void RenderingEngine::SetColor(int column, int row, color::ColorRGB color, double intensity) {
+void RenderingEngine::SetColor(int column, int row, color::ColorRGB color, const unsigned short int intensity) {
   SetColor(column, row, color * intensity);
 }
 
 void RenderingEngine::SetColor(int column, int row, color::ColorRGB color) {
   auto index = column + (row * GetSceneWidth());
-  pixels_.at(index) = color;
+  pixels_[index] = color;
 }
 
 void RenderingEngine::SetColorLine(int column,
                                    int bottom,
                                    int top,
                                    const texture::Texture &texture,
-                                   double intensity,
+                                   const unsigned short int intensity,
                                    int texture_vertical_coordinate) {
   for (int i = top, range_size = top - bottom; i > bottom; --i) {
     SetColor(column,
@@ -55,7 +55,7 @@ void RenderingEngine::LoadTexture(const char *path) {
 }
 
 texture::Texture &RenderingEngine::GetTexture(int index) {
-  return textures_.at(index);
+  return textures_[index];
 }
 
 int RenderingEngine::GetSceneWidth() const {
@@ -99,13 +99,13 @@ void RenderingEngine::DrawColumn(int column,
   auto texture_column = static_cast<int>(nearest_intersection) % static_cast<int>(map::kBlockSize);
 
   double height = GetHeightConstant() / min_distance;
-  double light_intensity = distance_shader_.GetIntensity(std::abs(static_cast<int>(min_distance)));
+  unsigned short int light_intensity = distance_shader_.GetIntensity(std::abs(static_cast<int>(min_distance)));
 
   SetColorLine(
       column,
       (int) floor((columns_height - height) / 2),
       (int) ((columns_height + height) / 2),
-      rendering_engine::RenderingEngine::GetTexture(0), //TODO chose how to select textures dinamically
+      rendering_engine::RenderingEngine::GetTexture(0), //TODO chose how to select textures dynamically
       light_intensity,
       texture_column);
 
@@ -120,14 +120,14 @@ void RenderingEngine::DrawFloor(int current_column,
                                 double height,
                                 double angle,
                                 position::Position position) {
-  double straight_line_distance, real_distance, light_intensity;
+  double straight_line_distance, real_distance;
   double x_texture, y_texture;
   for (int current_row = (int) ((columns_height - height) / 2); current_row > 0; --current_row) {
     straight_line_distance =
         GetDistanceFromProjectionPlane() * GetCameraHeight()
             / (current_row - (static_cast<double>(columns_height) / 2.)); // TODO extract this function
     real_distance = straight_line_distance / cos(beta);
-    light_intensity = distance_shader_.GetIntensity(std::abs(static_cast<int>(real_distance)));
+    unsigned short int light_intensity = distance_shader_.GetIntensity(std::abs(static_cast<int>(real_distance)));
 
     y_texture = straight_line_distance * sin(angle) + position.y;
     x_texture = straight_line_distance * cos(angle) - position.x;
