@@ -117,9 +117,11 @@ TEST(Texture, Expect_Constructor_ToLoadTexture) {
   auto texture = texture::Texture(image_path);
 
   auto result = texture.GetData();
-  std::vector<unsigned char> expected(64 * 64 * 3, 0);
-
-  EXPECT_EQ(expected, result);
+  for (int i = 0; i < 64 * 64; ++i) {
+    EXPECT_EQ(0, result[i].r);
+    EXPECT_EQ(0, result[i].g);
+    EXPECT_EQ(0, result[i].b);
+  }
 }
 
 TEST(Texture, When_WrongFileName_Expect_Exception) {

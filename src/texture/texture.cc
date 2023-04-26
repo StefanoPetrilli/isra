@@ -30,12 +30,12 @@ void texture::Texture::LoadTexture(const char *file_name) {
 
 void texture::Texture::ReadPPMContent(std::ifstream &file) {
   std::string buffer;
-  int number;
+  int r, g, b;
   std::istringstream stream;
   while (std::getline(file, buffer)) {
     stream = std::istringstream(buffer);
-    while (stream >> number)
-      data_.push_back(number);
+    while (stream >> r && stream >> g && stream >> b)
+      data_.push_back(color::ColorRGB{static_cast<unsigned char>(r), static_cast<unsigned char>(g), static_cast<unsigned char>(b)});
   }
 }
 
@@ -43,28 +43,24 @@ texture::Texture::Texture(const char *file_name) {
   LoadTexture(file_name);
 }
 
-int texture::Texture::GetSize() const {
-  { return size_; }
+int texture::Texture::GetSize() {
+  return size_;
 }
 
-int texture::Texture::GetChannels() const {
-  { return channels_; }
+int texture::Texture::GetChannels() {
+  return channels_;
 }
 
-int Texture::GetWidth() const {
+int Texture::GetWidth() {
   return width_;
 }
 
-int Texture::GetHeight() const {
+int Texture::GetHeight() {
   return height_;
 }
 
-std::vector<unsigned char> Texture::GetData() const {
+std::vector<color::ColorRGB> Texture::GetData() const {
   return data_;
-}
-
-unsigned char Texture::GetData(size_t index) const {
-  return data_.at(index);
 }
 
 void Texture::IsRightEncoding(const std::string &encoding) {
@@ -93,11 +89,7 @@ void Texture::IsReadSuccessfull(const std::string &value) {
 }
 
 //TODO test this function
-color::ColorRGB Texture::getColor(int x, int y) const {
-  if (x >= 0 && x < GetWidth() && y >= 0 && y < GetHeight()) {
-    int index = (y * GetWidth() + x) * GetChannels();
-    return {.r = GetData(index), .g = GetData(index + 1), .b = GetData(index + 2)};
-  }
-  throw std::invalid_argument("Wrong coordinates");
+color::ColorRGB Texture::GetColor(int x, int y) const {
+  return data_.at(y * GetWidth() + x);
 }
 }

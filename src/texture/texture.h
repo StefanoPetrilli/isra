@@ -21,22 +21,21 @@ class Texture {
   static void IsRightMaxValue(const std::string &max_value_string);
   void ReadPPMContent(std::ifstream &file);
   static void IsReadSuccessfull(const std::string &value);
-  std::vector<unsigned char> data_;
-  int width_ = 64;
-  int height_ = 64;
-  int channels_ = 3;
-  int size_ = width_ * height_ * channels_;
+  std::vector<color::ColorRGB> data_;
+  static constexpr int width_ = 64;
+  static constexpr int height_ = 64;
+  static constexpr int channels_ = 3;
+  static constexpr int size_ = width_ * height_ * channels_;
 
  public:
   explicit Texture(const char *file_name);
   ~Texture() = default;
-  int GetWidth() const;
-  int GetHeight() const;
-  int GetChannels() const;
-  int GetSize() const;
-  std::vector<unsigned char> GetData() const;
-  unsigned char GetData(size_t index) const;
-  color::ColorRGB getColor(int x, int y) const;
+  static int GetWidth() ;
+  static int GetHeight() ;
+  static int GetChannels() ;
+  static int GetSize() ;
+  std::vector<color::ColorRGB> GetData() const;
+  color::ColorRGB GetColor(int x, int y) const;
 };
 
 }
