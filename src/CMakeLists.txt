@@ -1,6 +1,7 @@
 add_subdirectory(assets)
 add_subdirectory(camera)
 add_subdirectory(color)
+add_subdirectory(distance_shader)
 add_subdirectory(geometry)
 add_subdirectory(map)
 add_subdirectory(position)

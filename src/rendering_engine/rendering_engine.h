@@ -24,8 +24,6 @@ class RenderingEngine {
   double height_constant_;
   map::Map map_;
   distance_shader::DistanceShader distance_shader_;
-  static double GetLightSourceConstant();
-  double GetLightIntensity(int distance) const;
   int GetSceneWidth() const;
   int GetSceneHeight() const;
   double GetDistanceFromProjectionPlane() const;

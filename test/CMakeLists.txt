@@ -16,12 +16,14 @@ target_link_libraries(isra_test
         texture
         color
         rendering_engine
+        distance_shader
         )
 
 target_link_libraries(performance_test
         PUBLIC
         GTest::gtest_main
         rendering_engine
+        distance_shader
         )
 
 include(GoogleTest)

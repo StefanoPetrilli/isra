@@ -43,7 +43,7 @@ void RenderingEngine::SetColorLine(int column,
   for (int i = top, range_size = top - bottom; i > bottom; --i) {
     SetColor(column,
              i,
-             texture.getColor(texture_vertical_coordinate, MapToTileSize(i - bottom, range_size, map::kBlockSize)) //TODO
+             texture.GetColor(texture_vertical_coordinate, MapToTileSize(i - bottom, range_size, map::kBlockSize)) //TODO
                  * intensity);
   }
 }
@@ -58,14 +58,6 @@ void RenderingEngine::LoadTexture(const char *path) {
 
 texture::Texture &RenderingEngine::GetTexture(int index) {
   return textures_.at(index);
-}
-
-double RenderingEngine::GetLightSourceConstant() {
-  return 4000.;
-}
-
-double RenderingEngine::GetLightIntensity(int distance) const {
-  return std::min((GetLightSourceConstant() / std::pow(distance, 2)), 1.);
 }
 
 int RenderingEngine::GetSceneWidth() const {
@@ -109,7 +101,7 @@ void RenderingEngine::DrawColumn(int column,
   auto texture_column = static_cast<int>(nearest_intersection) % static_cast<int>(map::kBlockSize);
 
   double height = GetHeightConstant() / min_distance;
-  double light_intensity = distance_shader_.GetIntensity(static_cast<int>(std::abs(min_distance)));
+  double light_intensity = distance_shader_.GetIntensity(std::abs(static_cast<int>(min_distance)));
 
   SetColorLine(
       column,
@@ -137,13 +129,13 @@ void RenderingEngine::DrawFloor(int current_column,
         GetDistanceFromProjectionPlane() * GetCameraHeight()
             / (current_row - (static_cast<double>(columns_height) / 2.)); // TODO extract this function
     real_distance = straight_line_distance / cos(beta);
-    light_intensity = distance_shader_.GetIntensity(static_cast<int>(std::abs(real_distance)));
+    light_intensity = distance_shader_.GetIntensity(std::abs(static_cast<int>(real_distance)));
 
-    y_texture = straight_line_distance * sin(angle) + position.y;
-    x_texture = straight_line_distance * cos(angle) - position.x;
+    y_texture = real_distance * sin(angle) + position.y;
+    x_texture = real_distance * cos(angle) - position.x;
 
     color::ColorRGB
-        color = rendering_engine::RenderingEngine::GetTexture(1).getColor(geometry::mod(x_texture, map::kBlockSize),
+        color = rendering_engine::RenderingEngine::GetTexture(1).GetColor(geometry::mod(x_texture, map::kBlockSize),
                                                                           geometry::mod(y_texture, map::kBlockSize));
 
     SetColor(current_column, current_row, color, light_intensity);
