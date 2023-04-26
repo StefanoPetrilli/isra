@@ -43,7 +43,7 @@ class Camera {
   int GetSceneHeight() const;
   double GetRotationStep() const;
   double GetMoveStep() const;
-  std::vector<unsigned char> &GetPixels();
+  std::vector<color::ColorRGB> &GetPixels();
   void Draw();
 };
 }

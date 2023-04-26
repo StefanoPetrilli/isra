@@ -32,8 +32,8 @@ bool Map::IsWall(position::Position position) {
 }
 
 bool Map::IsInside(position::Position position) {
-  double x = this->MapToMap(position.x), y = this->MapToMap(position.y);
-  return (x >= 0.0f && y >= 0.0f) && (x < this->GetWidth() && y < this->GetHeight());
+  double x = MapToMap(position.x), y = MapToMap(position.y);
+  return (x >= 0.0f && y >= 0.0f) && (x < GetWidth() && y < GetHeight());
 }
 
 Map Map::GetCoolMap() {
@@ -43,5 +43,4 @@ Map Map::GetCoolMap() {
 Map Map::GetBasicMap() {
   return Map(kBasicMap);
 }
-
 }

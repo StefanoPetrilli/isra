@@ -17,7 +17,7 @@ namespace rendering_engine {
 class RenderingEngine {
   int scene_width_;
   int scene_height_;
-  std::vector<unsigned char> pixels_;
+  std::vector<color::ColorRGB> pixels_;
   static std::vector<texture::Texture> textures_;
   double distance_from_projection_plane_;
   double camera_height_;
@@ -48,7 +48,7 @@ class RenderingEngine {
 
  public:
   RenderingEngine() : RenderingEngine(0, 0, 0, map::Map::GetBasicMap()) {}
-  std::vector<unsigned char> &GetPixels();
+  std::vector<color::ColorRGB> &GetPixels();
   RenderingEngine(int scene_width, int scene_height, double camera_height, map::Map map);
   static void LoadTexture(const char *path);
   static texture::Texture &GetTexture(int index);

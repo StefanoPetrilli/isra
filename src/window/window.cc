@@ -3,7 +3,6 @@
 //
 
 #include "window.h"
-#include "camera.h"
 
 namespace window {
 Window::Window(const std::string &window_name, camera::Camera *camera) {

@@ -64,7 +64,7 @@ double Camera::GetFacingDirectionInRadians() const {
   return view_direction_in_radians_;
 }
 
-std::vector<unsigned char> &Camera::GetPixels() {
+std::vector<color::ColorRGB> &Camera::GetPixels() {
   return engine_.GetPixels();
 }
 

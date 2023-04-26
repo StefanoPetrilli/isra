@@ -12,6 +12,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+
 #include <camera.h>
 
 namespace window {

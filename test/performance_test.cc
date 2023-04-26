@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
 
 class DrawBenchmark : public ::testing::Test {
  protected:
-  DrawBenchmark() {}
+  DrawBenchmark() = default;
   void SetUp() override {
     rendering_engine::RenderingEngine::LoadTexture("assets/test_all_black.ppm");
     rendering_engine::RenderingEngine::LoadTexture("assets/test_all_black.ppm");

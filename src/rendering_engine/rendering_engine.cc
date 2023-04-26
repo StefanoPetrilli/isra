@@ -14,13 +14,13 @@ rendering_engine::RenderingEngine::RenderingEngine(int scene_width,
   scene_width_ = scene_width;
   scene_height_ = scene_height;
   camera_height_ = camera_height;
-  pixels_ = std::vector<unsigned char>(scene_width * scene_height * 3, 0);
+  pixels_ = std::vector<color::ColorRGB>(scene_width * scene_height + 1, color::kBlack);
   distance_from_projection_plane_ =
       (static_cast<double>(this->GetSceneWidth()) / 2.)
           / std::tan(geometry::k60_degree); //TODO lockup table for tan;
   map_ = map;
   height_constant_ = map::kBlockSize * (static_cast<double>(this->GetSceneHeight()) / 2.) / 1.732050;
-  distance_shader_ = distance_shader::DistanceShader(std::max(map.GetWidth(), map.GetHeight()) * map::kBlockSize * 2);
+  distance_shader_ = distance_shader::DistanceShader(std::max(map.GetWidth(), map.GetHeight()) * map::kBlockSize * 2); // TODO fix this
 }
 
 void RenderingEngine::SetColor(int column, int row, color::ColorRGB color, double intensity) {
@@ -28,10 +28,8 @@ void RenderingEngine::SetColor(int column, int row, color::ColorRGB color, doubl
 }
 
 void RenderingEngine::SetColor(int column, int row, color::ColorRGB color) {
-  auto index = (column + (row * GetSceneWidth())) * 3;
-  pixels_[index] = color.r;
-  pixels_[index + 1] = color.g;
-  pixels_[index + 2] = color.b;
+  auto index = column + (row * GetSceneWidth());
+  pixels_.at(index) = color;
 }
 
 void RenderingEngine::SetColorLine(int column,
@@ -48,7 +46,7 @@ void RenderingEngine::SetColorLine(int column,
   }
 }
 
-std::vector<unsigned char> &RenderingEngine::GetPixels() {
+std::vector<color::ColorRGB> &RenderingEngine::GetPixels() {
   return pixels_;
 }
 
@@ -131,12 +129,12 @@ void RenderingEngine::DrawFloor(int current_column,
     real_distance = straight_line_distance / cos(beta);
     light_intensity = distance_shader_.GetIntensity(std::abs(static_cast<int>(real_distance)));
 
-    y_texture = real_distance * sin(angle) + position.y;
-    x_texture = real_distance * cos(angle) - position.x;
+    y_texture = straight_line_distance * sin(angle) + position.y;
+    x_texture = straight_line_distance * cos(angle) - position.x;
 
-    color::ColorRGB
-        color = rendering_engine::RenderingEngine::GetTexture(1).GetColor(geometry::mod(x_texture, map::kBlockSize),
-                                                                          geometry::mod(y_texture, map::kBlockSize));
+    color::ColorRGB color = rendering_engine::RenderingEngine::GetTexture(1)
+        .GetColor(geometry::mod(x_texture, map::kBlockSize),
+                  geometry::mod(y_texture, map::kBlockSize));
 
     SetColor(current_column, current_row, color, light_intensity);
   }
