@@ -8,11 +8,11 @@ namespace color {
 typedef struct ColorRGB {
   unsigned char r, g, b;
 
- ColorRGB operator*(const double x) const {
+ ColorRGB operator*(const unsigned short int x) const {
    ColorRGB result{};
-   result.r = r * x;
-   result.g = g * x;
-   result.b = b * x;
+   result.r = r * x >> 16;
+   result.g = g * x >> 16;
+   result.b = b * x >> 16;
    return result;
  }
 } ColorRGB;

@@ -38,12 +38,12 @@ class RenderingEngine {
   double GetHeightConstant() const;
   void DrawColumn(int column, double angle, int columns_height, position::Position position, double facing_direction);
   void SetColor(int column, int row, color::ColorRGB color);
-  void SetColor(int column, int row, color::ColorRGB color, double intensity);
+  void SetColor(int column, int row, color::ColorRGB color, unsigned short int intensity);
   void SetColorLine(int column,
                     int bottom,
                     int top,
                     const texture::Texture &texture,
-                    double intensity,
+                    unsigned short int intensity,
                     int texture_vertical_coordinate);
 
  public:
