@@ -22,21 +22,20 @@ class RenderingEngine {
   double distance_from_projection_plane_;
   double camera_height_;
   double height_constant_;
+  double straight_line_distance_constant_;
   map::Map map_;
   distance_shader::DistanceShader distance_shader_;
   int GetSceneWidth() const;
   int GetSceneHeight() const;
-  double GetDistanceFromProjectionPlane() const;
-  double GetCameraHeight() const;
+  double GetStraightLineDistanceConstant() const;
   void DrawCeiling(int current_column, int columns_height, double height);
   void DrawFloor(int current_column,
-                 double beta,
                  int columns_height,
                  double height,
                  double angle,
                  position::Position position);
   double GetHeightConstant() const;
-  void DrawColumn(int column, double angle, int columns_height, position::Position position, double facing_direction);
+  void DrawColumn(int column, double angle, int columns_height, position::Position position);
   void SetColor(int column, int row, color::ColorRGB color);
   void SetColor(int column, int row, color::ColorRGB color, unsigned short intensity);
   void SetColorLine(int column,

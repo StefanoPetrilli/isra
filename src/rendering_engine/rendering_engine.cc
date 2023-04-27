@@ -18,9 +18,11 @@ rendering_engine::RenderingEngine::RenderingEngine(int scene_width,
   distance_from_projection_plane_ =
       (static_cast<double>(this->GetSceneWidth()) / 2.)
           / std::tan(geometry::k60_degree); //TODO lockup table for tan;
+  straight_line_distance_constant_ = camera_height_ * distance_from_projection_plane_;
   map_ = map;
   height_constant_ = map::kBlockSize * (static_cast<double>(this->GetSceneHeight()) / 2.) / 1.732050;
-  distance_shader_ = distance_shader::DistanceShader(std::max(map.GetWidth(), map.GetHeight()) * map::kBlockSize * 2); // TODO fix this
+  distance_shader_ =
+      distance_shader::DistanceShader(std::max(map.GetWidth(), map.GetHeight()) * map::kBlockSize * 2); // TODO fix this
 }
 
 void RenderingEngine::SetColor(int column, int row, color::ColorRGB color, const unsigned short intensity) {
@@ -41,7 +43,8 @@ void RenderingEngine::SetColorLine(int column,
   for (int i = top, range_size = top - bottom; i > bottom; --i) {
     SetColor(column,
              i,
-             texture.GetColor(texture_vertical_coordinate, MapToTileSize(i - bottom, range_size, map::kBlockSize)) //TODO
+             texture.GetColor(texture_vertical_coordinate,
+                              MapToTileSize(i - bottom, range_size, map::kBlockSize)) //TODO
                  * intensity);
   }
 }
@@ -72,15 +75,11 @@ void RenderingEngine::Draw(double fov, double facing_direction, position::Positi
 
   for (int current_column = GetSceneWidth(); current_column > 0; --current_column) {
     angle = geometry::dmod(angle + ray_step, geometry::k359_degree);
-    DrawColumn(current_column, angle, GetSceneHeight(), position, facing_direction);
+    DrawColumn(current_column, angle, GetSceneHeight(), position);
   }
 }
 
-void RenderingEngine::DrawColumn(int column,
-                                 double angle,
-                                 int columns_height,
-                                 position::Position position,
-                                 double facing_direction) {
+void RenderingEngine::DrawColumn(int column, double angle, int columns_height, position::Position position) {
   position::Position
       horizontal_intersection = geometry::findHorizontalWallIntersection(position, angle, GetMap());
   position::Position vertical_intersection = geometry::findVerticalWallIntersection(position, angle, GetMap());
@@ -109,27 +108,23 @@ void RenderingEngine::DrawColumn(int column,
       light_intensity,
       texture_column);
 
-  double beta = std::abs(angle - facing_direction);
-  DrawFloor(column, beta, columns_height, height, angle, position);
+  DrawFloor(column, columns_height, height, angle, position);
   DrawCeiling(column, columns_height, height);
 }
 
 void RenderingEngine::DrawFloor(int current_column,
-                                double beta,
                                 int columns_height,
                                 double height,
                                 double angle,
                                 position::Position position) {
-  double straight_line_distance, real_distance;
-  double x_texture, y_texture;
-  double cos_beta = cos(beta), sin_angle = sin(angle), cos_angle = cos(angle);
+  double straight_line_distance, x_texture, y_texture;
+  double sin_angle = sin(angle), cos_angle = cos(angle);
+  double half_columns_height = columns_height >> 1;
+  unsigned short light_intensity;
 
   for (int current_row = (int) ((columns_height - height) / 2); current_row > 0; --current_row) {
-    straight_line_distance =
-        GetDistanceFromProjectionPlane() * GetCameraHeight()
-            / (current_row - (static_cast<double>(columns_height) / 2.)); // TODO extract this function
-    real_distance = straight_line_distance / cos_beta;
-    unsigned short light_intensity = distance_shader_.GetIntensity(std::abs(static_cast<int>(real_distance)));
+    straight_line_distance = GetStraightLineDistanceConstant() / (current_row - half_columns_height);
+    light_intensity = distance_shader_.GetIntensity(std::abs(static_cast<int>(straight_line_distance)));
 
     y_texture = straight_line_distance * sin_angle + position.y;
     x_texture = straight_line_distance * cos_angle - position.x;
@@ -140,7 +135,6 @@ void RenderingEngine::DrawFloor(int current_column,
 
     SetColor(current_column, current_row, color, light_intensity);
   }
-
 }
 
 void RenderingEngine::DrawCeiling(int current_column, int columns_height, double height) {
@@ -149,19 +143,16 @@ void RenderingEngine::DrawCeiling(int current_column, int columns_height, double
   }
 }
 
-double RenderingEngine::GetDistanceFromProjectionPlane() const {
-  return distance_from_projection_plane_;
-}
-
-double RenderingEngine::GetCameraHeight() const {
-  return camera_height_;
-}
-
 double RenderingEngine::GetHeightConstant() const {
   return height_constant_;
 }
+
 map::Map &RenderingEngine::GetMap() {
   return map_;
+}
+
+double RenderingEngine::GetStraightLineDistanceConstant() const {
+  return straight_line_distance_constant_;
 }
 
 int MapToTileSize(double coordinate, double range_size, double tile_size) {
