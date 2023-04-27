@@ -85,10 +85,6 @@ int mod(double a, double b) {
 }
 
 double dmod(double a, double b) {
-  double result = std::fmod(a, b);
-  if (result < 0) {
-    result += b;
-  }
-  return result;
+  return std::fmod(a + b, b);
 }
 }

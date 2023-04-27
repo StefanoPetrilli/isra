@@ -122,15 +122,17 @@ void RenderingEngine::DrawFloor(int current_column,
                                 position::Position position) {
   double straight_line_distance, real_distance;
   double x_texture, y_texture;
+  double cos_beta = cos(beta), sin_angle = sin(angle), cos_angle = cos(angle);
+
   for (int current_row = (int) ((columns_height - height) / 2); current_row > 0; --current_row) {
     straight_line_distance =
         GetDistanceFromProjectionPlane() * GetCameraHeight()
             / (current_row - (static_cast<double>(columns_height) / 2.)); // TODO extract this function
-    real_distance = straight_line_distance / cos(beta);
+    real_distance = straight_line_distance / cos_beta;
     unsigned short light_intensity = distance_shader_.GetIntensity(std::abs(static_cast<int>(real_distance)));
 
-    y_texture = straight_line_distance * sin(angle) + position.y;
-    x_texture = straight_line_distance * cos(angle) - position.x;
+    y_texture = straight_line_distance * sin_angle + position.y;
+    x_texture = straight_line_distance * cos_angle - position.x;
 
     color::ColorRGB color = rendering_engine::RenderingEngine::GetTexture(1)
         .GetColor(geometry::mod(x_texture, map::kBlockSize),
@@ -138,6 +140,7 @@ void RenderingEngine::DrawFloor(int current_column,
 
     SetColor(current_column, current_row, color, light_intensity);
   }
+
 }
 
 void RenderingEngine::DrawCeiling(int current_column, int columns_height, double height) {
