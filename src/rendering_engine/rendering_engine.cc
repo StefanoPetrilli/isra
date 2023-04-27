@@ -23,7 +23,7 @@ rendering_engine::RenderingEngine::RenderingEngine(int scene_width,
   distance_shader_ = distance_shader::DistanceShader(std::max(map.GetWidth(), map.GetHeight()) * map::kBlockSize * 2); // TODO fix this
 }
 
-void RenderingEngine::SetColor(int column, int row, color::ColorRGB color, const unsigned short int intensity) {
+void RenderingEngine::SetColor(int column, int row, color::ColorRGB color, const unsigned short intensity) {
   SetColor(column, row, color * intensity);
 }
 
@@ -36,7 +36,7 @@ void RenderingEngine::SetColorLine(int column,
                                    int bottom,
                                    int top,
                                    const texture::Texture &texture,
-                                   const unsigned short int intensity,
+                                   const unsigned short intensity,
                                    int texture_vertical_coordinate) {
   for (int i = top, range_size = top - bottom; i > bottom; --i) {
     SetColor(column,
@@ -99,7 +99,7 @@ void RenderingEngine::DrawColumn(int column,
   auto texture_column = static_cast<int>(nearest_intersection) % static_cast<int>(map::kBlockSize);
 
   double height = GetHeightConstant() / min_distance;
-  unsigned short int light_intensity = distance_shader_.GetIntensity(std::abs(static_cast<int>(min_distance)));
+  unsigned short light_intensity = distance_shader_.GetIntensity(std::abs(static_cast<int>(min_distance)));
 
   SetColorLine(
       column,
@@ -127,7 +127,7 @@ void RenderingEngine::DrawFloor(int current_column,
         GetDistanceFromProjectionPlane() * GetCameraHeight()
             / (current_row - (static_cast<double>(columns_height) / 2.)); // TODO extract this function
     real_distance = straight_line_distance / cos(beta);
-    unsigned short int light_intensity = distance_shader_.GetIntensity(std::abs(static_cast<int>(real_distance)));
+    unsigned short light_intensity = distance_shader_.GetIntensity(std::abs(static_cast<int>(real_distance)));
 
     y_texture = straight_line_distance * sin(angle) + position.y;
     x_texture = straight_line_distance * cos(angle) - position.x;

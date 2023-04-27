@@ -18,7 +18,7 @@ distance_shader::DistanceShader::DistanceShader(unsigned int max_distance) {
   }
 }
 
-unsigned short int distance_shader::DistanceShader::GetIntensity(unsigned int distance) const {
+unsigned short distance_shader::DistanceShader::GetIntensity(unsigned int distance) const {
   return intensity_values_[distance];
 }
 
