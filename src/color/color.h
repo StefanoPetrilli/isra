@@ -9,11 +9,9 @@ typedef struct ColorRGB {
   unsigned char r, g, b;
 
  ColorRGB operator*(const unsigned short x) const {
-   ColorRGB result{};
-   result.r = r * x >> 16;
-   result.g = g * x >> 16;
-   result.b = b * x >> 16;
-   return result;
+   return ColorRGB{static_cast<unsigned char>(r * x >> 16),
+                   static_cast<unsigned char>(g * x >> 16),
+                   static_cast<unsigned char>(b * x >> 16)};
  }
 } ColorRGB;
 
