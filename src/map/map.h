@@ -16,6 +16,7 @@ namespace map {
 typedef std::vector<std::vector<int>> tMap;
 
 const static double kBlockSize = 64.;
+const static int kBlockSizeInt = static_cast<int>(kBlockSize);
 const static tMap kCoolMap = {{1, 1, 1, 1, 1, 1},
                               {1, 0, 0, 0, 0, 1},
                               {1, 0, 1, 1, 1, 1},

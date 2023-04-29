@@ -80,8 +80,7 @@ void RenderingEngine::Draw(double fov, double facing_direction, position::Positi
 }
 
 void RenderingEngine::DrawColumn(int column, double angle, int columns_height, position::Position position) {
-  position::Position
-      horizontal_intersection = geometry::findHorizontalWallIntersection(position, angle, GetMap());
+  position::Position horizontal_intersection = geometry::findHorizontalWallIntersection(position, angle, GetMap());
   position::Position vertical_intersection = geometry::findVerticalWallIntersection(position, angle, GetMap());
 
   double horizontal_distance = geometry::findDistance(horizontal_intersection, position);
@@ -95,7 +94,7 @@ void RenderingEngine::DrawColumn(int column, double angle, int columns_height, p
     nearest_intersection = horizontal_intersection.x;
   }
 
-  auto texture_column = static_cast<int>(nearest_intersection) % static_cast<int>(map::kBlockSize);
+  auto texture_column = static_cast<int>(nearest_intersection) % map::kBlockSizeInt;
 
   double height = GetHeightConstant() / min_distance;
   unsigned short light_intensity = distance_shader_.GetIntensity(std::abs(static_cast<int>(min_distance)));
@@ -130,8 +129,8 @@ void RenderingEngine::DrawFloor(int current_column,
     x_texture = straight_line_distance * cos_angle - position.x;
 
     color::ColorRGB color = rendering_engine::RenderingEngine::GetTexture(1)
-        .GetColor(geometry::mod(x_texture, map::kBlockSize),
-                  geometry::mod(y_texture, map::kBlockSize));
+        .GetColor(std::abs(static_cast<int>(x_texture)) % map::kBlockSizeInt,
+                  std::abs(static_cast<int>(y_texture)) % map::kBlockSizeInt);
 
     SetColor(current_column, current_row, color, light_intensity);
   }

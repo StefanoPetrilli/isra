@@ -32,7 +32,6 @@ position::Position findVerticalWallIntersection(position::Position camera_positi
 double findDistance(position::Position intersection_position, position::Position camera_position);
 bool isLeft(double angle);
 bool isUp(double angle);
-int mod(double a, double b);
 double dmod(double a, double b);
 }
 #endif //ISRA_SRC_GEOMETRY_GEOMETRY_H_

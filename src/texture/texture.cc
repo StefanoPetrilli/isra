@@ -88,7 +88,6 @@ void Texture::IsReadSuccessfull(const std::string &value) {
     throw std::invalid_argument("Failed to read file");
 }
 
-//TODO test this function
 color::ColorRGB Texture::GetColor(int x, int y) const {
   return data_[y * GetWidth() + x];
 }

@@ -11,6 +11,7 @@
 
 #include <color.h>
 
+//TODO Is the texture loaded in the correct fashion to maximize cache hits?
 namespace texture {
 
 class Texture {
