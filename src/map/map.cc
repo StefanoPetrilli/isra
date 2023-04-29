@@ -27,8 +27,8 @@ int Map::MapToMap(double x) {
 }
 
 bool Map::IsWall(position::Position position) {
-  double x = this->MapToMap(position.x), y = this->MapToMap(position.y);
-  return this->IsWall(x, y);
+  double x = MapToMap(position.x), y = MapToMap(position.y);
+  return IsWall(x, y);
 }
 
 bool Map::IsInside(position::Position position) {
