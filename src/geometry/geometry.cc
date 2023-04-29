@@ -9,7 +9,7 @@ namespace geometry {
 position::Position findFirstHorizontalIntersection(position::Position camera_position, double angle, double tg) {
   position::Position result{};
 
-  result.y = floor(camera_position.y / map::kBlockSize) * map::kBlockSize + (geometry::isUp(angle) ? -1.f : 64.f);
+  result.y = floor(camera_position.y / map::kBlockSize) * map::kBlockSize + (geometry::isUp(angle) ? -1.f : map::kBlockSize);
   result.x = camera_position.x + (camera_position.y - result.y) / tg;
 
   return result;
@@ -64,8 +64,7 @@ position::Position findVerticalWallIntersection(position::Position camera_positi
 }
 
 double findDistance(position::Position intersection_position, position::Position camera_position) {
-  return sqrt(
-      pow(intersection_position.x - camera_position.x, 2) + pow(intersection_position.y - camera_position.y, 2));
+  return pow(intersection_position.x - camera_position.x, 2) + pow(intersection_position.y - camera_position.y, 2);
 }
 
 bool isLeft(double angle) {
