@@ -22,12 +22,27 @@ class DrawBenchmark : public ::testing::Test {
   rendering_engine::RenderingEngine rendering_engine = rendering_engine::RenderingEngine(3840,
                                                                                          2160,
                                                                                          60.,
+                                                                                         geometry::k60_degree,
                                                                                          map::Map::GetCoolMap());
 };
 
-TEST_F(DrawBenchmark, ExpectTrue) {
+TEST_F(DrawBenchmark, GetDrawTime) {
+  rendering_engine.Draw(0., position::Position{.x = 100., .y = 100.});
+
   auto start = std::chrono::steady_clock::now();
-  rendering_engine.Draw(geometry::k60_degree, 0., position::Position{.x = 100., .y = 100.});
+  rendering_engine.Draw(0., position::Position{.x = 100., .y = 100.});
+  auto end = std::chrono::steady_clock::now();
+
+  std::cout << "Elapsed time in milliseconds: "
+            << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()
+            << " ms" << std::endl;
+}
+
+TEST_F(DrawBenchmark, GetParallelDrawTime) {
+  rendering_engine.ParallelDraw(0., position::Position{.x = 100., .y = 100.});
+
+  auto start = std::chrono::steady_clock::now();
+  rendering_engine.ParallelDraw(0., position::Position{.x = 100., .y = 100.});
   auto end = std::chrono::steady_clock::now();
 
   std::cout << "Elapsed time in milliseconds: "

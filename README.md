@@ -12,6 +12,7 @@ The following packages have to be installed in order to successfully compile Isr
 - libglfw3
 - libglfw3-dev
 - libglew-dev
+- libomp-dev
 
 ## Contributing
 

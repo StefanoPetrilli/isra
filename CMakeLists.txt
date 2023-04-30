@@ -36,5 +36,12 @@ endif()
 #GLES2
 find_library(GLES2-lib GLESv2)
 
+#OpenMP
+find_package(OpenMP)
+if (OpenMP_CXX_FOUND)
+    add_definitions(-DOpenMP)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS} -fopenmp")
+endif()
+
 add_subdirectory(src)
 add_subdirectory(test)

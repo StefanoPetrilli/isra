@@ -2,7 +2,6 @@
 // Created by Stefano on 4/16/2023.
 //
 
-#include <cstring>
 #include "rendering_engine.h"
 
 namespace rendering_engine {
@@ -11,29 +10,46 @@ std::vector<texture::Texture> RenderingEngine::textures_;
 rendering_engine::RenderingEngine::RenderingEngine(int scene_width,
                                                    int scene_height,
                                                    double camera_height,
+                                                   double fov,
                                                    map::Map map) {
   scene_width_ = scene_width;
   scene_height_ = scene_height;
   camera_height_ = camera_height;
+  fov_ = fov;
+  ray_step_ = fov / scene_width;
   pixels_ = std::vector<color::ColorRGB>(scene_width * scene_height + 1, color::kBlack);
-  distance_from_projection_plane_ =
-      (static_cast<double>(this->GetSceneWidth()) / 2.)
-          / std::tan(geometry::k60_degree);
+  distance_from_projection_plane_ = (static_cast<double>(scene_width) / 2.) / std::tan(geometry::k60_degree);
   straight_line_distance_constant_ = camera_height_ * distance_from_projection_plane_;
   map_ = map;
   height_constant_ = map::kBlockSize * (static_cast<double>(this->GetSceneHeight()) / 2.) / 1.732050;
   distance_shader_ =
-      distance_shader::DistanceShader(std::max(map.GetWidth() * map::kBlockSizeInt, map.GetHeight()) * map::kBlockSizeInt);
+      distance_shader::DistanceShader(
+          std::max(map.GetWidth() * map::kBlockSizeInt, map.GetHeight()) * map::kBlockSizeInt);
 }
 
-void RenderingEngine::Draw(double fov, double facing_direction, position::Position position) {
-  double ray_step = fov / GetSceneWidth();
-  double angle = facing_direction - (fov / 2);
+void RenderingEngine::Draw(double facing_direction, position::Position position) {
+  double starting_angle = facing_direction - (GetFov() / 2);
   memset(&pixels_[0], 0, pixels_.size() * sizeof pixels_[0]);
 
-  for (int current_column = GetSceneWidth(); current_column > 0; --current_column) {
-    angle = geometry::dmod(angle + ray_step, geometry::k359_degree);
-    DrawColumn(current_column, angle, GetSceneHeight(), position);
+  for (int current_column = GetSceneWidth(); current_column > 0; --current_column)
+    DrawColumn(current_column,
+               geometry::dmod(starting_angle + (GetRayStep() * current_column), geometry::k359_degree),
+               GetSceneHeight(),
+               position);
+}
+
+void RenderingEngine::ParallelDraw(double facing_direction, position::Position position) {
+  double starting_angle = facing_direction - (GetFov() / 2);
+  memset(&pixels_[0], 0, pixels_.size() * sizeof pixels_[0]);
+
+#pragma omp parallel shared(starting_angle, position) default(none)
+  {
+#pragma omp for
+    for (int current_column = GetSceneWidth(); current_column > 0; --current_column)
+      DrawColumn(current_column,
+                 geometry::dmod(starting_angle + (GetRayStep() * current_column), geometry::k359_degree),
+                 GetSceneHeight(),
+                 position);
   }
 }
 
@@ -149,5 +165,13 @@ map::Map &RenderingEngine::GetMap() {
 
 double RenderingEngine::GetStraightLineDistanceConstant() const {
   return straight_line_distance_constant_;
+}
+
+double RenderingEngine::GetRayStep() const {
+  return ray_step_;
+}
+
+double RenderingEngine::GetFov() const {
+  return fov_;
 }
 }

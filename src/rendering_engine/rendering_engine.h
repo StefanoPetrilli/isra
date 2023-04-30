@@ -10,6 +10,7 @@
 #include <geometry.h>
 #include <distance_shader.h>
 
+#include <cstring>
 #include <vector>
 #include <cmath>
 
@@ -23,10 +24,14 @@ class RenderingEngine {
   double camera_height_;
   double height_constant_;
   double straight_line_distance_constant_;
+  double fov_;
+  double ray_step_;
   map::Map map_;
   distance_shader::DistanceShader distance_shader_;
   int GetSceneWidth() const;
   int GetSceneHeight() const;
+  double GetRayStep() const;
+  double GetFov() const;
   double GetStraightLineDistanceConstant() const;
   void DrawFloor(int current_column,
                  int columns_height,
@@ -45,12 +50,13 @@ class RenderingEngine {
                     int texture_vertical_coordinate);
 
  public:
-  RenderingEngine() : RenderingEngine(0, 0, 0, map::Map::GetBasicMap()) {}
+  RenderingEngine() : RenderingEngine(0, 0, 0, 0, map::Map::GetBasicMap()) {}
   std::vector<color::ColorRGB> &GetPixels();
-  RenderingEngine(int scene_width, int scene_height, double camera_height, map::Map map);
+  RenderingEngine(int scene_width, int scene_height, double camera_height, double fov, map::Map map);
   static void LoadTexture(const char *path);
   static texture::Texture &GetTexture(int index);
-  void Draw(double fov, double facing_direction, position::Position position);
+  void Draw(double facing_direction, position::Position position);
+  void ParallelDraw(double facing_direction, position::Position position);
   map::Map &GetMap();
 };
 int MapToTileSize(double coordinate, double range_size, double tile_size);

@@ -13,7 +13,7 @@ Camera::Camera(int scene_width, int scene_height, double camera_height, map::Map
   };
   scene_height_ = scene_height;
   scene_width_ = scene_width;
-  engine_ = rendering_engine::RenderingEngine(scene_width, scene_height, camera_height, map);
+  engine_ = rendering_engine::RenderingEngine(scene_width, scene_height, camera_height, GetFovInRadians(), map);
 }
 
 double Camera::GetFovInRadians() const {
@@ -91,6 +91,10 @@ void Camera::Move(int key) {
 }
 
 void Camera::Draw() {
-  engine_.Draw(GetFovInRadians(), GetFacingDirectionInRadians(), GetPosition());
+#ifdef OpenMP
+  engine_.ParallelDraw(GetFacingDirectionInRadians(), GetPosition());
+#else
+  engine_.Draw(GetFacingDirectionInRadians(), GetPosition());
+#endif
 }
 }
