@@ -28,7 +28,6 @@ class RenderingEngine {
   int GetSceneWidth() const;
   int GetSceneHeight() const;
   double GetStraightLineDistanceConstant() const;
-  void DrawCeiling(int current_column, int columns_height, double height);
   void DrawFloor(int current_column,
                  int columns_height,
                  double height,

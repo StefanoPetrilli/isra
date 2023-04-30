@@ -2,6 +2,7 @@
 // Created by Stefano on 4/16/2023.
 //
 
+#include <cstring>
 #include "rendering_engine.h"
 
 namespace rendering_engine {
@@ -28,6 +29,7 @@ rendering_engine::RenderingEngine::RenderingEngine(int scene_width,
 void RenderingEngine::Draw(double fov, double facing_direction, position::Position position) {
   double ray_step = fov / GetSceneWidth();
   double angle = facing_direction - (fov / 2);
+  memset(&pixels_[0], 0, pixels_.size() * sizeof pixels_[0]);
 
   for (int current_column = GetSceneWidth(); current_column > 0; --current_column) {
     angle = geometry::dmod(angle + ray_step, geometry::k359_degree);
@@ -62,7 +64,6 @@ void RenderingEngine::DrawColumn(int column, double angle, int columns_height, p
       static_cast<int>(nearest_intersection) % map::kBlockSizeInt);
 
   DrawFloor(column, columns_height, height, angle, position);
-  DrawCeiling(column, columns_height, height);
 }
 
 void RenderingEngine::DrawFloor(int current_column,
@@ -90,12 +91,6 @@ void RenderingEngine::DrawFloor(int current_column,
   }
 }
 
-void RenderingEngine::DrawCeiling(int current_column, int columns_height, double height) {
-  for (int current_row = (int) ((columns_height + height) / 2.); current_row < GetSceneHeight(); ++current_row) {
-    SetColor(current_column, current_row, color::kBlack);
-  }
-}
-
 void RenderingEngine::SetColor(int column, int row, color::ColorRGB color, const unsigned short intensity) {
   SetColor(column, row, color * intensity);
 }
@@ -115,7 +110,7 @@ void RenderingEngine::SetColorLine(int column,
     SetColor(column,
              i,
              texture.GetColor(texture_vertical_coordinate,
-                              MapToTileSize(i - bottom, range_size, map::kBlockSize)) //TODO
+                              MapToTileSize(i - bottom, range_size, map::kBlockSize))
                  * intensity);
   }
 }
